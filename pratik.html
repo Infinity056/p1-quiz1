@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>P1 Quiz 1 Pratik</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: sınav kağıdı gibi tek sütun; üstte yapışkan skor çubuğu, bölümler mock exam harfleriyle, her soru anında kontrol edilir */
+:root{
+  --bg:#f5f7fb; --surface:#ffffff; --ink:#14223d; --muted:#5a6680; --line:#d9dfeb;
+  --accent:#1d5fa8; --accent-soft:#e3edf9; --mark:#ffe766;
+  --ok:#1c7a4a; --ok-soft:#e3f5ea; --bad:#b4410f; --bad-soft:#fdeee5;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --surface:#151f33; --ink:#e7ecf6; --muted:#9aa6bf; --line:#27344d;
+  --accent:#7fb3ee; --accent-soft:#1b2c47; --mark:#6b5d12;
+  --ok:#5fd39a; --ok-soft:#14321f; --bad:#ff9a6b; --bad-soft:#3a2216; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --surface:#151f33; --ink:#e7ecf6; --muted:#9aa6bf; --line:#27344d;
+  --accent:#7fb3ee; --accent-soft:#1b2c47; --mark:#6b5d12;
+  --ok:#5fd39a; --ok-soft:#14321f; --bad:#ff9a6b; --bad-soft:#3a2216; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto}
+header.top{padding-block:32px 16px;display:grid;gap:8px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,42px);line-height:1.08;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(21px,4vw,26px);line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+.bar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.score{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.score small{font-family:var(--body);font-weight:600;font-size:14px;color:var(--muted)}
+.meter{flex:1 1 140px;height:8px;background:var(--line);border-radius:99px;overflow:hidden;min-width:100px}
+.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.jump{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1 1 100%}
+.jump a{flex:none;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.jump a:focus-visible,.jump a:hover{border-color:var(--accent);color:var(--accent);outline:none}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:15px;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.part-label{margin-top:36px;border-top:3px solid var(--ink);padding-top:12px;display:grid;gap:4px}
+.part-label .eyebrow{color:var(--accent)}
+section.sec{padding-block:26px 6px;display:grid;gap:14px;scroll-margin-top:110px}
+.sec-head{display:grid;gap:6px}
+.letter{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--bg);font-family:var(--display);font-weight:800;font-size:16px;margin-right:8px;vertical-align:2px}
+.instr{color:var(--muted);font-size:15.5px}
+.bank{display:flex;flex-wrap:wrap;gap:6px}
+.bank span{background:var(--surface);border:1px dashed var(--muted);border-radius:6px;padding:2px 9px;font-weight:600;font-size:15px}
+ol.qs{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:q}
+.q{counter-increment:q;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:10px;min-width:0}
+.q.ok{border-color:var(--ok);background:var(--ok-soft)}
+.q.bad{border-color:var(--bad);background:var(--bad-soft)}
+.stem{display:flex;gap:10px;align-items:baseline}
+.stem::before{content:counter(q) ".";font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;min-width:22px}
+.stem .txt{min-width:0}
+.gap{display:inline-block;min-width:70px;border-bottom:2px solid var(--muted);margin:0 2px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:16px;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt.pick-ok{background:var(--ok);border-color:var(--ok);color:var(--bg);font-weight:700}
+.opt.pick-bad{background:var(--bad);border-color:var(--bad);color:var(--bg);text-decoration:line-through}
+.opt.show-ok{border:2px solid var(--ok);font-weight:700}
+.opt:disabled{cursor:default}
+.inrow{display:flex;flex-wrap:wrap;gap:8px}
+.inrow input{flex:1 1 180px;min-width:0;font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.inrow input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.fb{font-size:15px;display:grid;gap:3px}
+.fb .verdict{font-weight:800}
+.q.ok .verdict{color:var(--ok)} .q.bad .verdict{color:var(--bad)}
+.fb .why{color:var(--muted)}
+.ans{font-weight:700}
+.reveal .fb{border-top:1px dashed var(--line);padding-top:8px}
+.endcard{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:10px}
+.endcard h2{font-size:22px}
+footer{margin-top:30px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion: reduce){.meter i{transition:none}}
+</style>
+
+<div class="wrap"><div style="max-width:780px;margin:0 auto;padding:10px 0 0;display:flex;gap:14px;font-family:system-ui,sans-serif;font-size:15px"><a href="index.html" style="color:inherit">Ana sayfa</a><a href="calisma.html" style="color:inherit;font-weight:600">← Çalışma dokümanı</a></div>
+<header class="top">
+  <span class="eyebrow">Boğaziçi YADYOK · P1 · Quiz 1 · 25 Kasım</span>
+  <h1>Quiz 1 Pratik Testi</h1>
+  <p style="color:var(--muted)">Sınav formatında grammar ve vocabulary soruları. Hepsi yeni cümleler: hocanın revision kağıdı ve B hocasının mock exam'iyle aynı tipte, ama aynı sorular değil. Şık seçince veya "Kontrol"e basınca hemen doğru mu yanlış mı görürsün. Açık uçlu sorularda "Cevabı göster"e bas.</p>
+</header>
+
+<div class="bar">
+  <span class="score" id="score">0 / 0 <small>doğru</small></span>
+  <span class="meter" aria-hidden="true"><i id="meter"></i></span>
+  <button class="btn" id="reset" type="button">Baştan başla</button>
+  <nav class="jump" id="jump" aria-label="Bölümler"></nav>
+</div>
+
+<main id="app"></main>
+
+<div class="endcard">
+  <h2>Bitirince</h2>
+  <p>Yanlış yaptığın soruların konusuna çalışma dokümanından tekrar bak. Kırmızı kalan soruları "Baştan başla" demeden tekrar çözebilirsin: sayfayı yenilemen yeterli, cevapların bu tarayıcıda saklanır.</p>
+</div>
+<footer>Kaynaklar: P1A/P1B syllabus (hafta 1–8), P1A Quiz 1 Revision, P1B Quiz 1 Vocabulary List ve Mock Exam, CC Booklet, Making Connections 2 Unit 1.</footer>
+</div>
+
+<script>
+// q types: mc {t:'mc', s:stem, o:[options], a:index, w:why}
+//          in {t:'in', s:stem, a:[accepted], w:why}
+//          rv {t:'rv', s:stem, a:answer, w:why}
+const MC=(s,o,a,w)=>({t:'mc',s,o,a,w}), IN=(s,a,w)=>({t:'in',s,a:[].concat(a),w}), RV=(s,a,w)=>({t:'rv',s,a,w});
+const G='___';
+const DATA=[
+{part:'Grammar'},
+{id:'g1',title:'Relative clauses: doğru zamir',instr:'Doğru seçeneği seç. Ø = zamir yok.',qs:[
+ MC(`The doctor ${G} helped my father was very kind.`,['who','which','whose'],0,'İnsan + özne konumu → who/that.'),
+ MC(`I lost the keys ${G} you gave me.`,['who','which','what'],1,'Eşya → which/that. "what" relative clause açmaz.'),
+ MC(`A teacher is a person ${G} helps students learn.`,['which','who','whose'],1,'İnsan → who.'),
+ MC(`The book ${G} is on the table belongs to Ayşe.`,['who','which','Ø'],1,'Arkasından fiil (is) geliyor: özne konumu, zamir atılamaz.'),
+ MC(`Is this the phone ${G} you bought last week?`,['what','Ø','who'],1,'Arkasından özne + fiil (you bought): nesne konumu, zamir atılabilir.'),
+ MC(`My uncle has two daughters who ${G} in London.`,['live','lives','living'],0,'Fiil, nitelenen isme (two daughters, çoğul) uyar.'),
+ MC('Hangi cümlede relative pronoun SİLİNEBİLİR?',['The girl who sits next to me is funny.','The film that we watched was boring.','The bus which goes to Taksim is late.'],1,'Sadece nesne konumunda (that + we watched) silinir.'),
+ MC('Hangisi doğru?',['The cake that I made it was delicious.','The cake that I made was delicious.','The cake which I made them was delicious.'],1,'Relative clause içinde fazladan it/them kalmaz.')
+]},
+{id:'g2',title:'Relative clauses: hatayı bul',instr:'Revision Ex. 1 tipi. Cümledeki hatayı bul ve düzelt, sonra cevaba bak. Bir cümle doğru.',qs:[
+ RV('The woman which works at the bank is my aunt.','which → who / that','İnsan için which kullanılmaz.'),
+ RV('The pizza that we ordered it was cold.','"it" silinmeli → The pizza that we ordered was cold.','Fazladan zamir.'),
+ RV('I have a friend who live in Ankara.','live → lives','a friend tekil, fiil -s alır.'),
+ RV('The shoes I bought them yesterday are too small.','"them" silinmeli','Fazladan zamir.'),
+ RV('The students who passed the exam was happy.','was → were','Ana fiil "The students"a uyar.'),
+ RV('The museum that we visited last summer was amazing.','Doğru, hata yok.','Nesne konumu, fazladan zamir yok, fiil uyumlu.'),
+ RV('The man lives next door is a famous singer.','The man who/that lives next door…','Özne konumundaki zamir silinemez.')
+]},
+{id:'g3',title:'Relative clauses: birleştir',instr:'Revision Ex. 2 tipi. who, which, that veya Ø kullanarak iki cümleyi birleştir.',qs:[
+ RV('The man is a doctor. He lives next door.','The man who/that lives next door is a doctor.'),
+ RV('I read a book. My teacher recommended it.','I read a book (which/that/Ø) my teacher recommended.'),
+ RV('The café was crowded. We visited it yesterday.','The café (which/that/Ø) we visited yesterday was crowded.'),
+ RV('The girl won the competition. She took a beautiful photo of the city.','The girl who/that took a beautiful photo of the city won the competition.'),
+ RV('I met a woman. Her job is very unusual.','I met a woman whose job is very unusual.','"whose" + isim = kimin. Az çıkar ama bil.')
+]},
+{id:'g4',title:'Comparatives & superlatives',instr:'Parantezdeki sıfat/zarfın doğru formunu yaz. Gerekirse the / than ekle.',qs:[
+ IN(`This test is ${G} (easy) than the last one.`,['easier'],'-y → -ier.'),
+ IN(`Istanbul is ${G} (crowded) city in Türkiye.`,['the most crowded'],'Superlative: the most + uzun sıfat.'),
+ IN(`My brother drives ${G} (carefully) than me.`,['more carefully'],'-ly zarf → more + zarf.'),
+ IN(`Today is ${G} (bad) day of my life!`,['the worst'],'bad → worse → the worst.'),
+ IN(`Ali runs ${G} (fast) than his friends.`,['faster'],'fast düzensiz zarf: faster.'),
+ IN(`This is one of ${G} (good) restaurants in the city.`,['the best'],'one of the + superlative + çoğul isim.'),
+ IN(`Ayşe gets up ${G} (early) than everyone in her family.`,['earlier'],'early → earlier (more early değil).'),
+ IN(`The new phone is ${G} (expensive) than the old one.`,['more expensive']),
+ IN(`Who is ${G} (funny) person in your class?`,['the funniest']),
+ IN(`Our new flat is ${G} (big) than our old flat.`,['bigger'],'Tek sesli + tek sessiz → harf ikilenir.'),
+ IN(`She speaks English ${G} (fluently) than her sister.`,['more fluently']),
+ IN(`Mars is ${G} (far) from the Sun than Earth.`,['farther','further']),
+ IN(`It was ${G} (spectacular) view I have ever seen.`,['the most spectacular'])
+]},
+{id:'g5',title:'Too / very / enough',instr:'Revision Ex. 6 tipi. İkinci cümleye bak: olumsuz sonuç mu var?',qs:[
+ MC(`The tea is ${G} hot. I can't drink it.`,['very','too','enough'],1,'Olumsuz sonuç → too.'),
+ MC(`The exam was ${G} difficult, but I passed it.`,['too','very','enough'],1,'Olumlu sonuç → very.'),
+ MC(`He isn't old ${G} to drive a car.`,['too','very','enough'],2,'sıfat + enough.'),
+ MC(`We don't have ${G} chairs for everyone.`,['enough','too','very'],0,'enough + isim.'),
+ MC(`This bag is ${G} heavy for me to carry.`,['very','too','enough'],1),
+ MC(`The film was ${G} long, but we enjoyed it.`,['too','very','enough'],1),
+ MC(`The room is big ${G} for four people.`,['too','very','enough'],2),
+ MC(`The music is ${G} loud. Could you turn it down?`,['very','too','enough'],1,'Kısmasını istiyor → sorun var → too.')
+]},
+{id:'g6',title:'Articles: a / an / the / Ø',instr:'Ø = article yok.',qs:[
+ MC(`My sister is ${G} engineer.`,['a','an','the','Ø'],1,'Meslek + sesli harfle başlayan okunuş.'),
+ MC(`${G} sun rises in the east.`,['A','An','The','Ø'],2,'Tek olan şey.'),
+ MC(`I usually have ${G} breakfast at 8.`,['a','an','the','Ø'],3,'Öğün isimleri.'),
+ MC(`She wants to study at ${G} university in Canada.`,['a','an','the','Ø'],0,'university /ju:/ sesiyle başlar → a.'),
+ MC(`Can you play ${G} guitar?`,['a','an','the','Ø'],2,'Müzik aletleri.'),
+ MC(`They live in ${G} Netherlands.`,['a','an','the','Ø'],2,'Çoğul ülke adı.'),
+ MC(`${G} milk is good for your bones.`,['A','An','The','Ø'],3,'Genel anlamda sayılamayan isim.'),
+ MC(`I waited for ${G} hour.`,['a','an','the','Ø'],1,'h okunmuyor → an hour.'),
+ MC(`I bought a jacket and a hat. ${G} jacket was cheap.`,['A','An','The','Ø'],2,'İkinci kez bahsediliyor.'),
+ MC(`We visited ${G} Italy last summer.`,['a','an','the','Ø'],3,'Tekil ülke adı.'),
+ MC(`He goes to ${G} bed at 11 p.m.`,['a','an','the','Ø'],3,'Kalıp: go to bed.'),
+ MC(`This is ${G} best day of my life.`,['a','an','the','Ø'],2,'Superlative.'),
+ MC(`Many tourists swim in ${G} Black Sea.`,['a','an','the','Ø'],2,'Deniz isimleri the alır.')
+]},
+{id:'g7',title:'Quantifiers & countable / uncountable',instr:'Doğru seçeneği seç.',qs:[
+ MC(`How ${G} money do you have?`,['much','many','a few'],0,'money sayılamaz.'),
+ MC(`There aren't ${G} students in the classroom.`,['some','any','much'],1,'Olumsuz → any.'),
+ MC(`I have ${G} friends in Ankara, so I'm not lonely.`,['a few','a little','much'],0,'friends sayılabilir çoğul.'),
+ MC(`Could I have ${G} water, please?`,['any','some','many'],1,'Rica → some.'),
+ MC(`There is ${G} milk in the fridge. We need to buy some.`,['no','any','a few'],0,'Olumlu fiil + no = hiç yok.'),
+ MC(`There are ${G} cars in the city centre. The traffic is terrible.`,['too much','too many','enough'],1,'cars sayılabilir.'),
+ MC(`Add ${G} sugar to the tea, just one spoon.`,['a few','a little','many'],1,'sugar sayılamaz.'),
+ MC(`We don't have ${G} time. Hurry up!`,['many','much','a few'],1),
+ MC(`How ${G} people came to the party?`,['much','many','little'],1),
+ MC(`The lab needs some new ${G}.`,['equipments','equipment','an equipment'],1,'equipment sayılamaz, çoğul olmaz.')
+]},
+{id:'g8',title:'Tenses: parantezdeki fiil',instr:'Revision Ex. 8–9 tipi. Doğru formu yaz. Soru varsa soru kur.',qs:[
+ IN(`Listen! Someone ${G} (knock) on the door.`,['is knocking',"'s knocking"],'Listen! → present continuous.'),
+ IN(`My father ${G} (not/drink) coffee. He prefers tea.`,["doesn't drink",'does not drink'],'Genel alışkanlık.'),
+ IN(`Water ${G} (boil) at 100°C.`,['boils'],'Genel gerçek.'),
+ IN(`I ${G} (think) about my summer plans right now.`,["am thinking","'m thinking"],'think = düşünmek eylemi → -ing olur.'),
+ IN(`I ${G} (think) this book is boring.`,['think'],'think = fikir → -ing yok.'),
+ IN(`${G} (you/know) the answer?`,['do you know'],'know stative.'),
+ IN(`Yesterday I ${G} (wake) up late.`,['woke']),
+ IN(`We ${G} (be) at home last night.`,['were']),
+ IN(`${G} (you/go) to the cinema last weekend?`,['did you go']),
+ IN(`She ${G} (not/come) to class yesterday.`,["didn't come",'did not come']),
+ IN(`When I was five, I ${G} (can/swim).`,['could swim']),
+ IN(`Atatürk ${G} (found) the Republic in 1923.`,['founded'],'found (kurmak) düzenli fiil.'),
+ IN(`She can't come to the phone. She ${G} (have) a shower.`,["is having","'s having"],'have = eylem (duş almak).'),
+ IN(`This soup ${G} (smell) delicious.`,['smells'],'smell = durum → -ing yok.'),
+ IN(`Everyone in my class ${G} (need) a dictionary.`,['needs'],'Everyone + tekil fiil.'),
+ IN(`One of my friends ${G} (live) in Germany.`,['lives'],'One of… + tekil fiil.'),
+ IN(`I ${G} (leave) the house at 8 and caught the bus.`,['left']),
+ IN(`It ${G} (look) high quality. I'll buy it.`,['looks'],'look = görünmek → -ing yok.'),
+ IN(`${G} (where/you/buy) that jacket? It's lovely.`,['where did you buy']),
+ IN(`I ${G} (feel) terrible yesterday, so I stayed at home.`,['felt'])
+]},
+{id:'g9',title:'Future: will / be going to / present continuous',instr:'En uygun seçeneği seç.',qs:[
+ MC(`I've decided. I ${G} study medicine.`,['will','am going to','am studying'],1,'Önceden verilmiş karar → be going to.'),
+ MC(`Those bags look heavy. I ${G} help you.`,["'m going to","'ll","'m helping"],1,'Anlık karar / teklif → will.'),
+ MC(`I think people ${G} live on Mars one day.`,['will','are living','are going'],0,'Kanıtsız tahmin + I think → will.'),
+ MC(`We ${G} a party on Saturday. We've invited 20 people.`,['are having','will have','have'],0,'Ayarlanmış plan → present continuous.'),
+ MC(`I promise I ${G} tell anyone.`,["won't","am not going to","am not telling"],0,'Söz → will / won\'t.'),
+ MC(`The car ${G} start. I need to call a mechanic.`,["won't","isn't going","doesn't going"],0,'Çalışmama → won\'t.'),
+ MC(`Look at those black clouds! It ${G} rain.`,['will','is going to','rains'],1,'Kanıta dayalı tahmin → be going to.'),
+ MC(`A: The phone's ringing. B: OK, I ${G} answer it.`,["'ll","'m going to","answer"],0,'Konuşma anında karar.')
+]},
+{id:'g10',title:'Pronouns & temel yapılar',instr:'Doğru seçeneği seç.',qs:[
+ MC(`This isn't my pen. It's ${G}.`,['her','hers','she'],1),
+ MC(`${G} car is that? It's Mehmet's.`,['Who','Whose',"Who's"],1),
+ MC(`Our teacher gave ${G} a lot of homework.`,['we','us','our'],1),
+ MC(`The children love ${G} new school.`,['there','their',"they're"],1),
+ MC(`Is this bag ${G}?`,['your','yours','you'],1),
+ MC(`There ${G} a lot of people at the concert last night.`,['was','were','is'],1,'people çoğul + geçmiş.'),
+ MC(`${G} there any eggs in the fridge?`,['Is','Are','Do'],1),
+ MC(`Look at ${G} birds over there!`,['this','these','those'],2,'Uzak + çoğul.'),
+ MC(`${G} your brother like football?`,['Is','Does','Do'],1,'like normal fiil → does.'),
+ MC(`${G} you tired?`,['Do','Are','Does'],1,'Sıfat → be.')
+]},
+{id:'g11',title:'Booklet + High Note: çoğul, özne-fiil, soru, zarflar',instr:'Booklet ve High Note gramer bölümlerinden. Doğru seçeneği seç.',qs:[
+ MC(`There are three ${G} in the kitchen.`,['knifes','knives','knive'],1,'-f/-fe → -ves.'),
+ MC(`Two ${G} are playing in the garden.`,['childs','children','childrens'],1),
+ MC(`I bought some ${G} for the salad.`,['tomatos','tomatoes','tomatoies'],1,'-o → -es (ama radios, pianos).'),
+ MC(`We visited three ${G} in Italy.`,['citys','cities','cityes'],1),
+ MC(`The ${G} at the farm are eating grass.`,['sheep','sheeps','sheepes'],0,'sheep, fish, deer değişmez.'),
+ MC(`My brother ${G} football and watches TV after school.`,['play','plays','playing'],1,'İki fiil de özneye uyar.'),
+ MC(`The plates in the kitchen ${G} dirty.`,['is','are','be'],1,'Ana isim: plates.'),
+ MC(`Tom and Jerry ${G} funny characters.`,['is','are','am'],1,'and → çoğul.'),
+ MC(`Nobody ${G} the answer.`,['know','knows','are knowing'],1,'no-/every-/some- → tekil.'),
+ MC(`People in this city ${G} many languages.`,['speaks','speak','is speaking'],1),
+ MC(`He trains two hours a day. → ${G} does he train a day?`,['How long','How often','How much'],0),
+ MC(`${G} next door? A young couple lives there.`,['Who lives','Who does live','Who do live'],0,'Özneyi soruyorsan yardımcı fiil yok.'),
+ MC(`${G} your sister like chocolate?`,['Is','Does','Do'],1),
+ MC('Hangisi doğru?',['She is always late.','She always is late.','Always she is late.'],0,'be\'nin arkasına.'),
+ MC('Hangisi doğru?',['I usually get up at 7.','I get usually up at 7.','Usually I get up usually at 7.'],0,'Normal fiilin önüne.'),
+ MC(`The bank is ${G} the post office. You can see it across the street.`,['opposite','between','under'],0),
+ MC(`${G} you got a pen? Yes, I have.`,['Do','Have','Has'],1),
+ MC(`${G} touch that! It's hot.`,["Don't",'Not','No'],0,'Olumsuz emir: Don\'t + fiil.'),
+ MC(`She sings very ${G}.`,['good','well','goodly'],1,'good → well.'),
+ MC(`He drives very ${G}. He never has accidents.`,['careful','carefully','carefuly'],1),
+ MC(`They worked ${G} all day.`,['hard','hardly','hardy'],0,'hardly = neredeyse hiç.'),
+ MC(`Please speak ${G}. The baby is sleeping.`,['quiet','quietly','quietely'],1),
+ MC(`She is ${G} in the pool right now.`,['swiming','swimming','swimmming'],1,'sıv-sesli-sıv → ikilenir.'),
+ MC(`He ${G} English at university last year.`,['studyed','studied','studdied'],1),
+ MC(`My father ${G} the car every Sunday.`,['washs','washes','washies'],1)
+]},
+{id:'g12',title:'Focus on Grammar 2 notlarından',instr:'Kitabın Grammar Notes kurallarına göre doğru seçeneği seç.',qs:[
+ MC(`Istanbul is ${G} larger than Ankara.`,['much','very','more'],0,'Comparative\'i güçlendirmek: much.'),
+ MC(`My car is older than ${G}.`,["my sister's",'my sister','my sister car'],0,'Aynı şeyleri karşılaştır.'),
+ MC(`${G} is bigger, London or Paris?`,['Which city','What city','Who'],0),
+ MC(`It's the tallest building ${G} the world.`,['in','of','than'],0),
+ MC(`She is the youngest ${G} the three sisters.`,['in','of','than'],1),
+ MC(`A: How many cookies did you eat? B: ${G}`,['A lot.','A lot of.','Much.'],0),
+ MC(`A: How much money is left? B: ${G}`,['Not many.','Not much.','A few.'],1),
+ MC('Hangisi doğal?',['There is much milk in the fridge.','There is a lot of milk in the fridge.','There are many milk in the fridge.'],1,'Olumlu cümlede a lot of.'),
+ MC(`I drank two ${G} of water.`,['glass','glasses','glassies'],1),
+ MC(`Can a penguin fly? No, it ${G}.`,["can't","couldn't","doesn't"],0),
+ MC(`${G} you swim when you were five?`,['Can','Could','Did'],1),
+ MC(`A: Will you be there? B: Yes, I ${G}.`,['will',"'ll",'am'],0,'Olumlu kısa cevapta kısaltma yok.'),
+ MC('Hangisi doğru?',['I will probably go.','I probably will go not.','I will go probably not.'],0),
+ MC(`${G} you going to study tonight?`,['Are','Will','Do'],0),
+ MC(`There ${G} many people at the party last night.`,['was','were','are'],1)
+]},
+{part:'Vocabulary'},
+{id:'v1',title:'Listeden kelime (form değişmez)',instr:'Mock exam Part A tipi. Her kelimeyi bir kez kullan, 2 kelime fazla.',bank:['active','agitated','alternative','awake','brief','huge','illiterate','informative','particular','public','regular','wide'],qs:[
+ IN(`The documentary was very ${G}. I learned a lot about volcanoes.`,['informative']),
+ IN(`My grandmother never went to school, so she was ${G}. She couldn't read or write.`,['illiterate']),
+ IN(`I drank three cups of coffee, so I stayed ${G} until 3 a.m.`,['awake']),
+ IN(`The teacher gave a ${G} explanation. It took only one minute.`,['brief']),
+ IN(`Solar energy is an ${G} source of energy.`,['alternative']),
+ IN(`You can borrow books for free from the ${G} library.`,['public']),
+ IN(`Mexico City is a ${G} city with more than 20 million people.`,['huge']),
+ IN(`Is there a ${G} restaurant you want to go to tonight?`,['particular']),
+ IN(`Before the exam, he was walking up and down. He couldn't sit still. He was very ${G}.`,['agitated']),
+ IN(`Babies need a ${G} sleep schedule. They should go to bed at the same time every night.`,['regular'])
+]},
+{id:'v2',title:'Listeden kelime (doğru formda)',instr:'Mock exam Part B tipi. Kelimeyi doğru formda yaz (-s, -ed, -ing). 2 kelime fazla.',bank:['afford','consider','develop','establish','expect','gather','improve','offer','participate','publish','resist','upset'],qs:[
+ IN(`Students who ${G} in class discussions improve their speaking quickly.`,['participate']),
+ IN(`My parents can't ${G} a new car this year. It's too expensive.`,['afford']),
+ IN(`Hundreds of people ${G} in the square last night to watch the match.`,['gathered']),
+ IN(`Our university ${G} free language classes every summer.`,['offers']),
+ IN(`The first newspaper was ${G} in the 1600s.`,['published']),
+ IN(`Children's brains ${G} very quickly in the first years of life.`,['develop']),
+ IN(`My teacher ${G} us to be on time for every lesson.`,['expects']),
+ IN(`The company was ${G} in 1995 by two friends.`,['established']),
+ IN(`I'm ${G} studying abroad next year, but I haven't decided yet.`,['considering']),
+ IN(`The bad news really ${G} her yesterday. She cried all evening.`,['upset'],'upset – upset – upset.')
+]},
+{id:'v3',title:'Kelime türü',instr:'Mock exam Part C tipi. Boşluktan önceki kelimeye bak.',qs:[
+ MC(`Thomas Edison was a famous ${G}.`,['invent','inventor','invention'],1,'a famous + kişi.'),
+ MC(`The ${G} of the internet changed the world.`,['invent','inventor','invention'],2,'Şey → invention.'),
+ MC(`Our New Year ${G} was fantastic.`,['celebrate','celebration'],1),
+ MC(`Thank you for a very ${G} evening.`,['enjoy','enjoyable','enjoyment'],1,'very + sıfat.'),
+ MC(`Please be ${G} to your grandparents.`,['respect','respectful'],1,'be + sıfat.'),
+ MC(`Breaking a mirror brings bad ${G}.`,['lucky','luck','unlucky'],1,'bad + isim.'),
+ MC(`The police caught the ${G} after the robbery.`,['crime','criminal'],1,'Kişi → criminal.'),
+ MC(`I can see a big ${G} in your pronunciation.`,['improve','improvement','improving'],1),
+ MC(`The city's ${G} has been very fast.`,['develop','development'],1),
+ MC(`I failed the exam by one point. I was so ${G}.`,['lucky','unlucky','luck'],1),
+ MC(`The film was ${G}. Everyone screamed.`,['terrified','horrifying'],1,'Şeyi anlatan → -ing.'),
+ MC(`The children were ${G} during the storm.`,['terrified','horrifying'],0,'Kişinin hissi → -ed.')
+]},
+{id:'v4',title:'Phrasal verbs',instr:'Mock exam Part D tipi. Gerekirse formu değiştir. 1 tane fazla.',bank:['deal with','depend on','fall asleep','find out','get into','put on','stay up','take part in','take place','wake up'],qs:[
+ IN(`The final exam will ${G} in the main hall.`,['take place']),
+ IN(`I want to ${G} what time the museum opens.`,['find out']),
+ IN(`Whether we go to the beach ${G} the weather.`,['depends on']),
+ IN(`She studied very hard and ${G} Boğaziçi University.`,['got into']),
+ IN(`I ${G} late last night to finish my project, so I'm tired.`,['stayed up']),
+ IN(`Taxi drivers have to ${G} difficult passengers every day.`,['deal with']),
+ IN(`More than 50 students ${G} the debate competition last year.`,['took part in']),
+ IN(`It's cold outside. ${G} your jacket.`,['put on']),
+ IN(`The film was so boring that I ${G} in the cinema.`,['fell asleep'])
+]},
+{id:'v5',title:'Hafta 6–8: anlamı bul',instr:'Türkçe anlamın İngilizcesini seç.',qs:[
+ MC('üniversiteye kabul',['admission','generation','habit'],0),
+ MC('hareketsiz, oturarak yapılan',['selective','sedentary','eager'],1),
+ MC('seçici',['selective','sedentary','obvious'],0),
+ MC('dehşete düşmüş',['agitated','terrified','informative'],1),
+ MC('hevesli, can atan',['eager','average','brief'],0),
+ MC('nesil',['culture','generation','trend'],1),
+ MC('misafir ağırlayan kişi',['host','expert','villager'],0),
+ MC('amaç',['purpose','skill','major'],0),
+ MC('üniversitedeki ana dal',['subject','major','level'],1),
+ MC('-den önce',['in addition to','prior to','by word of mouth'],1),
+ MC('ağızdan ağıza',['by word of mouth','in the early days','bad news'],0),
+ MC('apaçık, belli',['obvious','particular','average'],0),
+ MC('gezip görmek',['take a break','go sightseeing','gap year'],1),
+ MC('iklim',['environment','climate','season'],1)
+]},
+{id:'v6',title:'Making Connections 2 + revision kağıdı',instr:'Cümleye en uygun kelimeyi seç.',qs:[
+ MC(`The volcano ${G} suddenly and everybody ran.`,['erupted','declined','estimated'],0),
+ MC(`The police ${G} that 10,000 people came to the concert.`,['estimated','encouraged','accepted'],0),
+ MC(`My teacher always ${G} us to speak English in class.`,['encourages','declines','manages'],0),
+ MC(`This speaker is small and ${G}. You can take it everywhere.`,['portable','strict','enormous'],0),
+ MC(`The number of smokers began to ${G} after the new law.`,['decline','erupt','transmit'],0),
+ MC(`An ${G} amount of rubbish was on the beach.`,['enormous','portable','sole'],0),
+ MC(`Our teacher is very ${G}. We must follow every rule.`,['strict','versatile','convenient'],0),
+ MC(`The first radios were big and heavy. They were ${G}.`,['bulky','global','informative'],0),
+ MC(`Online shopping is ${G}. You can do it from home.`,['convenient','illiterate','bulky'],0),
+ MC(`Radio stations ${G} the news through the air.`,['transmit','resist','span'],0),
+ MC(`TV is not the ${G} way to get news. There is also the internet.`,['sole','brief','local'],0),
+ MC(`Social media had a huge ${G} on the news.`,['impact','pace','appetite'],0),
+ MC(`A good journalist is ${G}: she can write, film and take photos.`,['versatile','sedentary','terrified'],0),
+ MC(`Telegraph wires ${G} the United States from east to west.`,['spanned','gathered','published'],0),
+ MC(`Earthquakes, floods and eruptions are ${G}.`,['natural disasters','broadcasts','traditions'],0),
+ MC(`The TV channel began ${G} the election results at 8 p.m.`,['broadcasting','accelerating','declining'],0),
+ MC(`The telegraph was ${G} well, so news traveled fast.`,['functioning','resisting','gathering'],0),
+ MC(`As newspapers became cheaper, more ${G} began to buy them.`,['consumers','villagers','editors'],0)
+]},
+{id:'v7',title:'Booklet: kelime türetme',instr:'Seza Hoca\'nın çalışma kağıdı tipi. Parantezdeki kelimenin doğru formunu yaz (zaman ve tekil/çoğul dikkat).',qs:[
+ IN(`Good ${G} is important for a successful company. (LEAD)`,['leadership']),
+ IN(`My teacher always ${G} us to read more books. (ADVICE)`,['advises']),
+ IN(`Nature is a great source of ${G} for many painters. (INSPIRE)`,['inspiration']),
+ IN(`She needs better ${G} skills. Her desk is always a mess. (ORGANIZE)`,['organizational']),
+ IN(`If you study hard, you will ${G}. (SUCCESS)`,['succeed']),
+ IN(`The small café became very ${G} in its first year. (PROFIT)`,['profitable']),
+ IN(`Parents can ${G} their children's eating habits. (INFLUENTIAL)`,['influence']),
+ IN(`The teacher's words were very ${G}, so we felt more confident. (ENCOURAGE)`,['encouraging']),
+ IN(`The ${G} of the famous singer shocked her fans. (DIE)`,['death']),
+ IN(`Her ${G} to her patients makes her a great doctor. (DEDICATE)`,['dedication']),
+ IN(`The ${G} finished the new school in only six months. (BUILDING)`,['builders']),
+ IN(`These flowers are only ${G}. You can't eat them. (DECORATION)`,['decorative']),
+ IN(`Only two people ${G} the plane crash last year. (SURVIVAL)`,['survived']),
+ IN(`Swimming every day gave him great ${G}. (STRENGTHEN)`,['strength']),
+ IN(`The police caught the ${G} near the bank. (ROB)`,['robber','robbers']),
+ IN(`Istanbul is ${G} for its mosques and the Bosphorus. (FAME)`,['famous']),
+ IN(`Many English words have Latin ${G}. (ORIGINATE)`,['origins','origin'])
+]},
+{id:'v8',title:'Booklet + Skillful kelimeleri',instr:'Boşluğa en uygun seçeneği seç.',qs:[
+ MC(`Attendance at prep school is ${G} for all students.`,['compulsory','elective','available'],0),
+ MC(`At Boğaziçi, English is the ${G} of instruction.`,['medium','rank','board'],0),
+ MC(`Our university ${G} among the top five in the country.`,['ranks','lasts','consists'],0),
+ MC(`The course ${G} of three parts: reading, writing and speaking.`,['consists','ranks','serves'],0),
+ MC(`Hagia Sophia is a ${G} of Byzantine architecture.`,['masterpiece','treasure','column'],0),
+ MC(`The building first ${G} as a church, then as a mosque.`,['served','regarded','robbed'],0),
+ MC(`These rugs didn't cost a ${G}. They were cheap.`,['fortune','deal','stall'],0),
+ MC(`In the souk, people love to ${G} with sellers to pay less.`,['bargain','experience','cheat'],0),
+ MC(`She received a weather ${G} on her phone about the snow.`,['alert','incident','runway'],0),
+ MC(`A doctor is always on ${G} in the VIP lounge.`,['standby','board','duty'],0),
+ MC(`The air ${G} made the plane shake.`,['turbulence','landing','security'],0),
+ MC(`There is a lot of air ${G} in big cities because of the traffic.`,['pollution','pattern','trend'],0,'Skillful Unit 3.'),
+ MC(`I live in a quiet ${G} near the city centre.`,['neighborhood','downtown','level'],0),
+ MC(`She has a positive ${G} and is open to new cultures.`,['attitude','costume','license'],0),
+ MC(`Can you keep an ${G} on my bag for a minute?`,['eye','hand','ear'],0),
+ MC(`Please don't ${G} me when I'm speaking.`,['interrupt','expect','describe'],0),
+ MC(`Most people have a ${G} sleep pattern of 7–8 hours.`,['typical','strict','mixed'],0),
+ MC(`My parents were very ${G}. I had to be home at 9 p.m.`,['strict','easy-going','talkative'],0),
+ MC(`Simultaneous bilinguals learn two languages at the ${G} time.`,['same','various','sequential'],0),
+ MC(`Exams cause ${G} for many students.`,['anxiety','awareness','interference'],0)
+]},
+{id:'v9',title:'High Note 1, Units 1–8',instr:'Kitabın Word List kelimelerinden. Boşluğa en uygun seçeneği seç.',qs:[
+ MC(`My brother never cleans his room. It's always so ${G}.`,['messy','tidy','quiet'],0),
+ MC(`I live on the ${G} floor, so I can see the whole city.`,['top','front','high'],0),
+ MC(`Can you ${G} the washing-up after dinner?`,['make','do','have'],1,'do the washing-up, do chores.'),
+ MC(`Please don't ${G} a mess in the kitchen.`,['do','make','take'],1,'make a mess / make a suggestion.'),
+ MC(`Check the ${G} before you drink the milk.`,['use-by date','opening hours','special offer'],0),
+ MC(`Don't ${G} away the leftovers. We can eat them tomorrow.`,['give','throw','put'],1),
+ MC(`I'm going to ${G} an exam on Friday. I hope I pass it.`,['take','make','do'],0,'take an exam; pass/fail an exam.'),
+ MC(`Biology is compulsory, but Drama is ${G}.`,['optional','practical','motivated'],0),
+ MC(`He's very ${G}. He never gets angry or worried.`,['easy-going','serious','bald'],0),
+ MC(`Can I ${G} on these jeans? Where is the changing room?`,['try','fit','suit'],0),
+ MC(`That colour really ${G} you. You look great!`,['suits','fits','tries'],0,'suit = yakışmak; fit = beden olarak olmak.'),
+ MC(`The film was so ${G}. I knew the ending after ten minutes.`,['predictable','original','record-breaking'],0),
+ MC(`All the tickets for the festival ${G} in one hour.`,['sold out','showed up','cleaned up'],0),
+ MC(`The ${G} of the film is about a boy who travels in time.`,['plot','cast','soundtrack'],0),
+ MC(`We got ${G} the bus at the town hall.`,['off','out','down'],0,'get on/off the bus.'),
+ MC(`It was cheap because we ${G} a bike instead of taking taxis.`,['hired','booked','boarded'],0),
+ MC(`Don't forget to ${G} your changes before you close the file.`,['save','swap','scan'],0),
+ MC(`My phone is dead. Where's the ${G}?`,['charger','checkout','key ring'],0),
+ MC(`She answered the question very ${G}. She was sure she was right.`,['confidently','urgently','badly'],0,'Adverb of manner: -ly.'),
+ MC(`I felt ${G} when I saw the spider.`,['frightened','amazing','boring'],0,'Kişinin hissi → -ed.')
+]},
+{id:'v10',title:'Hafta 1–5 tekrar',instr:'Tanıma uyan kelimeyi seç.',qs:[
+ MC('Someone who only thinks about himself',['selfish','shy','polite'],0),
+ MC('Someone who likes to talk a lot',['talkative','organized','confident'],0),
+ MC('Happy to give time or money to others',['lazy','generous','similar'],1),
+ MC('Nervous when talking to new people',['shy','intelligent','comfortable'],0),
+ MC('Believing in your own ability',['confident','selfish','lazy'],0),
+ MC('A result; a change that something causes',['goal','effect','grade'],1),
+ MC('Something you hope to achieve',['goal','instructions','big picture'],0),
+ MC('To make something happen, usually something bad',['believe','experience','cause'],2)
+]}
+];
+
+// --- state ---
+const KEY='p1quiz1-pratik-v1';
+let state={};
+try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+const norm=s=>String(s).toLowerCase().replace(/[’‘`]/g,"'").replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stemHTML=s=>esc(s).split(G).join('<span class="gap"></span>');
+
+const app=document.getElementById('app'), jump=document.getElementById('jump');
+let total=0;
+DATA.forEach(sec=>{
+  if(sec.part){const d=document.createElement('div');d.className='part-label';d.innerHTML=`<span class="eyebrow">Bölüm</span><h2>${sec.part}</h2>`;app.appendChild(d);return}
+  const letterIdx=jump.children.length;
+  const el=document.createElement('section');el.className='sec';el.id=sec.id;
+  const letter=sec.id.toUpperCase();
+  el.innerHTML=`<div class="sec-head"><h2><span class="letter">${letter}</span>${esc(sec.title)}</h2><p class="instr">${esc(sec.instr)}</p>${sec.bank?`<div class="bank">${sec.bank.map(w=>`<span>${esc(w)}</span>`).join('')}</div>`:''}</div><ol class="qs"></ol>`;
+  const a=document.createElement('a');a.href='#'+sec.id;a.textContent=letter;a.title=sec.title;jump.appendChild(a);
+  const ol=el.querySelector('ol');
+  sec.qs.forEach((q,i)=>{
+    const qid=sec.id+'-'+i; const li=document.createElement('li');li.className='q';li.dataset.qid=qid;
+    if(q.t!=='rv') total++;
+    let body=`<div class="stem"><span class="txt">${stemHTML(q.s)}</span></div>`;
+    if(q.t==='mc') body+=`<div class="opts">${q.o.map((o,k)=>`<button type="button" class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
+    if(q.t==='in') body+=`<form class="inrow"><input id="in-${qid}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Cevap ${i+1}"><button class="btn primary" type="submit">Kontrol</button></form>`;
+    if(q.t==='rv'){li.classList.add('reveal');body+=`<div><button type="button" class="btn rvb">Cevabı göster</button></div>`}
+    body+=`<div class="fb" hidden></div>`;
+    li.innerHTML=body; ol.appendChild(li);
+    const fb=li.querySelector('.fb');
+    const show=(ok,ansText)=>{
+      li.classList.toggle('ok',ok===true);li.classList.toggle('bad',ok===false);
+      fb.hidden=false;
+      fb.innerHTML=(ok===null?'':`<span class="verdict">${ok?'Doğru':'Yanlış'}</span>`)+
+        ((ok!==true||q.t==='rv')&&ansText?`<span>Cevap: <span class="ans">${esc(ansText)}</span></span>`:'')+
+        (q.w?`<span class="why">${esc(q.w)}</span>`:'');
+    };
+    if(q.t==='mc'){
+      const btns=[...li.querySelectorAll('.opt')];
+      const apply=k=>{btns.forEach(b=>b.disabled=true);
+        const ok=k===q.a; btns[k].classList.add(ok?'pick-ok':'pick-bad'); if(!ok) btns[q.a].classList.add('show-ok');
+        show(ok,q.o[q.a]);};
+      btns.forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.k;state[qid]={k};save();apply(k);score()}));
+      if(state[qid]&&typeof state[qid].k==='number') apply(state[qid].k);
+    }
+    if(q.t==='in'){
+      const f=li.querySelector('form'), inp=li.querySelector('input');
+      const apply=v=>{const ok=q.a.some(x=>norm(x)===norm(v));show(ok,q.a.join(' / '));};
+      f.addEventListener('submit',e=>{e.preventDefault();if(!inp.value.trim())return;state[qid]={v:inp.value};save();apply(inp.value);score()});
+      if(state[qid]&&state[qid].v!=null){inp.value=state[qid].v;apply(state[qid].v)}
+    }
+    if(q.t==='rv'){
+      const b=li.querySelector('.rvb');
+      const apply=()=>{b.hidden=true;show(null,q.a)};
+      b.addEventListener('click',()=>{state[qid]={r:1};save();apply()});
+      if(state[qid]&&state[qid].r) apply();
+    }
+  });
+  app.appendChild(el);
+});
+
+function score(){
+  const ok=document.querySelectorAll('.q.ok').length;
+  const done=document.querySelectorAll('.q.ok,.q.bad').length;
+  document.getElementById('score').innerHTML=`${ok} / ${total} <small>doğru · ${done} cevaplandı</small>`;
+  document.getElementById('meter').style.width=(total?ok/total*100:0)+'%';
+}
+score();
+
+const rs=document.getElementById('reset');let armed=false,timer;
+rs.addEventListener('click',()=>{
+  if(!armed){armed=true;rs.textContent='Emin misin? Tekrar bas';clearTimeout(timer);timer=setTimeout(()=>{armed=false;rs.textContent='Baştan başla'},3000);return}
+  state={};save();location.reload();
+});
+</script>
+
+</body>
+</html>

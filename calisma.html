@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>P1 Quiz 1 Çalışma</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: tek sütun ders notu; üstte yapışkan konu şeridi, her konu bir "kart değil" bölüm, tuzaklar fosforlu kalem şeridiyle */
+:root{
+  --bg:#f5f7fb; --surface:#ffffff; --ink:#14223d; --muted:#5a6680; --line:#d9dfeb;
+  --accent:#1d5fa8; --accent-soft:#e3edf9; --mark:#ffe766; --mark-ink:#14223d;
+  --trap:#b4410f; --trap-soft:#fdeee5; --ok:#1c7a4a;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --surface:#151f33; --ink:#e7ecf6; --muted:#9aa6bf; --line:#27344d;
+  --accent:#7fb3ee; --accent-soft:#1b2c47; --mark:#6b5d12; --mark-ink:#fff6c7;
+  --trap:#ff9a6b; --trap-soft:#3a2216; --ok:#5fd39a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --surface:#151f33; --ink:#e7ecf6; --muted:#9aa6bf; --line:#27344d;
+  --accent:#7fb3ee; --accent-soft:#1b2c47; --mark:#6b5d12; --mark-ink:#fff6c7;
+  --trap:#ff9a6b; --trap-soft:#3a2216; --ok:#5fd39a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:780px;margin:0 auto}
+header.top{padding-block:36px 20px;display:grid;gap:10px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.08;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(23px,4.4vw,30px);line-height:1.15;margin:0;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0}
+p{margin:0}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:15px}
+.fact b{color:var(--accent)}
+nav.toc{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.toc a{flex:none;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;padding:5px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+section.part{padding-block:40px 8px;display:grid;gap:22px;scroll-margin-top:60px}
+.part-head{display:grid;gap:6px;border-top:3px solid var(--ink);padding-top:14px}
+.part-head .eyebrow{color:var(--accent)}
+.topic{display:grid;gap:12px;padding-block:6px 18px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.topic:last-child{border-bottom:0}
+.src{font-size:13px;color:var(--muted);font-weight:600}
+ul,ol{margin:0;padding-left:1.25em;display:grid;gap:5px}
+.ex{color:var(--muted);font-style:italic}
+.ex b,.ex strong{font-style:normal;color:var(--ink)}
+mark,.hl{background:linear-gradient(transparent 12%, var(--mark) 12%, var(--mark) 88%, transparent 88%);color:var(--mark-ink);padding:0 3px;border-radius:2px}
+.trap{background:var(--trap-soft);border-left:4px solid var(--trap);padding:12px 14px;border-radius:0 8px 8px 0;display:grid;gap:6px}
+.trap .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--trap)}
+.wrong{color:var(--trap);text-decoration:line-through;text-decoration-thickness:1.5px}
+.right{color:var(--ok);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--accent-soft)}
+td.w{font-weight:700;white-space:nowrap}
+td.t{color:var(--muted);font-size:13.5px;white-space:nowrap}
+.group-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.group-title .src{font-weight:600}
+.tip{background:var(--accent-soft);border-radius:10px;padding:14px 16px;display:grid;gap:8px}
+.tip .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.mini h4{margin:0;font-family:var(--display);font-weight:600;font-size:16px}
+.check{counter-reset:c;list-style:none;padding:0;display:grid;gap:10px}
+.check li{counter-increment:c;display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start}
+.check li::before{content:counter(c);font-family:var(--display);font-weight:800;font-size:18px;color:var(--accent);text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;line-height:30px}
+.wl{list-style:none;padding:0;margin:0;columns:3 210px;column-gap:22px;display:block}
+.wl li{break-inside:avoid;padding:3px 0;border-bottom:1px solid var(--line);font-size:15.5px;line-height:1.35}
+.wl li span{color:var(--muted)}
+details.unit{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:4px 14px 12px}
+details.unit+details.unit{margin-top:10px}
+details.unit summary{cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:8px 0;font-family:var(--display);font-weight:600;font-size:18px}
+details.unit summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h4.sub{margin:12px 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.skip-tag{font-family:var(--body);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;vertical-align:1px}
+.sub-head{border-top:1px solid var(--line);padding-top:12px;margin-top:10px;scroll-margin-top:60px}
+.sub-head h2{font-size:clamp(20px,3.6vw,24px)}
+.instr-line{color:var(--muted);font-size:15.5px}
+.topic a,.mini a{color:var(--accent)}
+footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:480px){body{font-size:16px} th,td{padding:7px 9px}}
+</style>
+
+<div class="wrap"><div style="max-width:780px;margin:0 auto;padding:10px 0 0;display:flex;gap:14px;font-family:system-ui,sans-serif;font-size:15px"><a href="index.html" style="color:inherit">Ana sayfa</a><a href="pratik.html" style="color:inherit;font-weight:600">Pratik testine geç →</a></div>
+<header class="top">
+  <span class="eyebrow">Boğaziçi YADYOK · P1 · 2026–2027 Fall</span>
+  <h1>Quiz 1 Çalışma Dokümanı</h1>
+  <p style="color:var(--muted)">Sadece grammar ve vocabulary. Kapsam 1–8. haftalar (8. hafta dahil). Kaynaklar: P1A ve P1B syllabus, hocanın P1A Quiz 1 Revision kağıdı, B hocasının kelime listesi ve mock exam'i, CC Booklet.</p>
+  <div class="facts">
+    <span class="fact"><b>25 Kasım</b> Çarşamba</span>
+    <span class="fact">Grammar <b>+</b> Vocabulary</span>
+    <span class="fact">Weeks <b>1–8</b></span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Bölümler">
+  <a href="#kapsam">Duyuru</a>
+  <a href="#src-fog">G1 FoG 2</a>
+  <a href="#src-hn">G2 High Note</a>
+  <a href="#src-cc">G3 Booklet</a>
+  <a href="#fognotes">FoG 2 notları</a>
+  <a href="#rel">Relative clauses</a>
+  <a href="#comp">Comparatives</a>
+  <a href="#too">Too/very/enough</a>
+  <a href="#art">Articles</a>
+  <a href="#quant">Quantifiers</a>
+  <a href="#tense">Tenses</a>
+  <a href="#fut">Future</a>
+  <a href="#pron">Pronouns</a>
+  <a href="#basic">Temel</a>
+  <a href="#plural">Çoğullar</a>
+  <a href="#sva">Özne-fiil</a>
+  <a href="#qform">Soru</a>
+  <a href="#spell">Yazım</a>
+  <a href="#freq">Sıklık</a>
+  <a href="#prep">Edatlar</a>
+  <a href="#manner">-ly zarflar</a>
+  <a href="#v-hn">V1 High Note</a>
+  <a href="#v-sk">V2 Skillful</a>
+  <a href="#v-mc">V3 Making Conn.</a>
+  <a href="#v-bk">V4 Booklet</a>
+  <a href="#v-ek">Ek</a>
+  <a href="#son">Son 5 dk</a>
+</nav>
+
+<!-- KAPSAM -->
+<section class="part" id="kapsam">
+  <div class="part-head"><span class="eyebrow">Başlamadan</span><h2>Hocanın duyurusu: sınav nereden?</h2></div>
+  <p>Quiz 1, 25 Kasım Çarşamba. Hafta 1–8, 8. hafta dahil. Bu doküman duyurudaki her maddeyi sırayla karşılıyor:</p>
+  <div class="grid2">
+    <div class="mini"><h4>Grammar</h4>
+      <ul>
+        <li><a href="#src-fog">Focus on Grammar 2</a>: syllabus'taki üniteler</li>
+        <li><a href="#src-hn">High Note 1</a>: syllabus'taki üniteler</li>
+        <li><a href="#src-cc">CC grammar booklet ve handout'lar</a></li>
+      </ul></div>
+    <div class="mini"><h4>Vocabulary</h4>
+      <ul>
+        <li><a href="#v-hn">High Note 1</a>: Units 1–8</li>
+        <li><a href="#v-sk">Skillful L&amp;S 1</a>: Units 1–4</li>
+        <li><a href="#v-mc">Making Connections 2</a>: Unit 1</li>
+        <li><a href="#v-bk">Booklet okuma/dinleme kelime bölümleri</a></li>
+      </ul></div>
+  </div>
+  <div class="tip"><span class="lbl">Öncelik sırası</span>
+    <p>B hocası: <mark>6–8. haftaların kelimeleri en önemlisi</mark>, çünkü midterm'de çıkmadılar. Grammar'da en yeni konular 8. haftadan: <b>relative clauses</b> ve <b>will / be going to</b>. Seza Hoca'nın kağıdı booklet <b>kelime türetme</b> tablolarına ağırlık veriyor.</p>
+  </div>
+</section>
+
+<!-- GRAMMAR -->
+<section class="part" id="grammar">
+  <div class="part-head"><span class="eyebrow">Bölüm 1</span><h2>Grammar</h2></div>
+  <p class="instr-line">Hocanın duyurusundaki üç grammar kaynağı sırayla. Her tablodaki bağlantı aşağıdaki konu anlatımına gider.</p>
+  <div class="topic" id="src-fog">
+    <h3>G1 · Focus on Grammar 2: syllabus'taki üniteler</h3>
+    <span class="src">Duyuru: "Focus on Grammar 2: Units stated in the syllabus (Weeks 1–8; Week 8 included)" · P1A syllabus</span>
+    <div class="tbl"><table>
+      <tr><th>Hafta</th><th>Ünite</th><th>Konu</th><th>Çalış</th></tr>
+      <tr><td>1–2</td><td>1, 2</td><td>Present of <i>be</i>: statements &amp; questions</td><td><a href="#basic">Temel yapılar</a></td></tr>
+      <tr><td>1–2</td><td>8, 9, 10</td><td>Present Simple Tense</td><td><a href="#tense">Tenses</a> · <a href="#spell">Yazım kuralları</a> · <a href="#freq">Sıklık zarfları</a></td></tr>
+      <tr><td>3</td><td>11</td><td>There is / There are</td><td><a href="#basic">Temel yapılar</a></td></tr>
+      <tr><td>3</td><td>12</td><td>Possessive nouns &amp; adjectives; pronouns; <i>Whose</i></td><td><a href="#pron">Pronouns</a></td></tr>
+      <tr><td>3</td><td>13</td><td>Can (s. 150–151 tablo 4&amp;5, s. 153 ex. 1, s. 155 ex. 4 atlanıyor)</td><td><a href="#basic">Temel yapılar</a></td></tr>
+      <tr><td>3</td><td>26</td><td>Articles with count &amp; non-count nouns; some / any</td><td><a href="#art">Articles</a> · <a href="#quant">Quantifiers</a></td></tr>
+      <tr><td>4</td><td>27</td><td>How much / How many; quantifiers</td><td><a href="#quant">Quantifiers</a></td></tr>
+      <tr><td>4</td><td>15, 16, 17</td><td>Present Progressive Tense</td><td><a href="#tense">Tenses</a> · <a href="#spell">Yazım kuralları</a></td></tr>
+      <tr><td>5</td><td>3</td><td>Was / Were</td><td><a href="#tense">Tenses</a></td></tr>
+      <tr><td>5</td><td>13</td><td>Could (bu kez s. 153 tablo 4&amp;5 ve ex. 1, s. 155 ex. 4 dahil)</td><td><a href="#basic">Temel yapılar</a></td></tr>
+      <tr><td>5</td><td>18, 19, 20, 21</td><td>Simple Past (+ review)</td><td><a href="#tense">Tenses</a> · <a href="#spell">Yazım kuralları</a></td></tr>
+      <tr><td>6</td><td>31, 34</td><td>Comparatives · Superlatives</td><td><a href="#comp">Comparatives</a></td></tr>
+      <tr><td>7</td><td>—</td><td>Grammar yok (Midterm 1)</td><td>—</td></tr>
+      <tr><td>8</td><td>22, 23</td><td>Be going to · Will</td><td><a href="#fut">Future</a></td></tr>
+    </table></div>
+    <p>Kitabın içindekiler sayfası ve ünitelerin Grammar Notes sayfaları kontrol edildi. Kitaba özgü ek kurallar: <a href="#fognotes">FoG 2 notları</a>.</p>
+  </div>
+
+  <div class="topic" id="src-hn">
+    <h3>G2 · High Note 1: ünitelerin grammar konuları</h3>
+    <span class="src">Duyuru: "High Note 1: Units stated in the syllabus (Weeks 1–8)" · kitabın içindekiler sayfası</span>
+    <div class="tbl"><table>
+      <tr><th>Ünite</th><th>Grammar</th><th>Çalış</th></tr>
+      <tr><td>Welcome</td><td>Subject pronouns, <i>to be</i> · plural nouns, articles, this/that/these/those · possessive adjectives, possessive 's, <i>have got</i> · imperatives, object pronouns · ordinal numbers</td><td><a href="#basic">Temel</a> · <a href="#plural">Çoğullar</a> · <a href="#pron">Pronouns</a> · <a href="#havegot">have got</a> · <a href="#imper">Imperatives</a></td></tr>
+      <tr><td>1</td><td>Present simple (affirmative, negative, questions) · adverbs of frequency · final -s</td><td><a href="#tense">Tenses</a> · <a href="#freq">Sıklık zarfları</a> · <a href="#spell">Yazım</a></td></tr>
+      <tr><td>2</td><td>There is / there are + some / any · prepositions of place · can / can't</td><td><a href="#basic">Temel</a> · <a href="#prep">Prepositions of place</a></td></tr>
+      <tr><td>3</td><td>Countable / uncountable + some / any / no · too many, too much, a few, a little, not many, not much</td><td><a href="#quant">Quantifiers</a></td></tr>
+      <tr><td>4</td><td>Present continuous · present simple vs present continuous</td><td><a href="#tense">Tenses</a></td></tr>
+      <tr><td>5</td><td>Past simple: <i>to be</i> and <i>can</i> · affirmative · negative &amp; questions · -ed endings</td><td><a href="#tense">Tenses</a> · <a href="#spell">Yazım</a></td></tr>
+      <tr><td>6</td><td>Comparative &amp; superlative adjectives · <i>too</i> and <i>(not) enough</i></td><td><a href="#comp">Comparatives</a> · <a href="#too">Too/enough</a></td></tr>
+      <tr><td>7</td><td><i>Going to</i> · present continuous for future arrangements</td><td><a href="#fut">Future</a></td></tr>
+      <tr><td>8</td><td><i>Will / won't</i> for predictions · adverbs of manner</td><td><a href="#fut">Future</a> · <a href="#manner">Adverbs of manner</a></td></tr>
+    </table></div>
+  </div>
+
+  <div class="topic" id="src-cc">
+    <h3>G3 · CC grammar booklet ve handout'lar (hafta 1–8)</h3>
+    <span class="src">Duyuru: "All grammar booklets, handouts and/or materials provided by the C.C." · Booklet 1 + Booklet 2 · P1A Quiz 1 Revision kağıdı</span>
+    <div class="tbl"><table>
+      <tr><th>Booklet bölümü</th><th>Çalış</th></tr>
+      <tr><td>Nouns and Indefinite Articles: a / an · Singular–Plural Practice</td><td><a href="#plural">Çoğullar</a> · <a href="#art">Articles</a></td></tr>
+      <tr><td>Demonstrative Determiners: this, that, these, those</td><td><a href="#basic">Temel</a></td></tr>
+      <tr><td>Be or Do · Introduction to Can</td><td><a href="#basic">Temel</a></td></tr>
+      <tr><td>Articles 1</td><td><a href="#art">Articles</a></td></tr>
+      <tr><td>Pronouns and Possessive Adjectives</td><td><a href="#pron">Pronouns</a></td></tr>
+      <tr><td>Quantifiers 1</td><td><a href="#quant">Quantifiers</a></td></tr>
+      <tr><td>Present Simple and Present Continuous · Tense Revision</td><td><a href="#tense">Tenses</a></td></tr>
+      <tr><td>Subject–Verb Agreement 1</td><td><a href="#sva">Subject–verb agreement</a></td></tr>
+      <tr><td>Question Formation</td><td><a href="#qform">Soru kurma</a></td></tr>
+      <tr><td>Past Simple Tense (was/were, regular &amp; irregular)</td><td><a href="#tense">Tenses</a> · <a href="#spell">Yazım</a></td></tr>
+      <tr><td>Comparatives and Superlatives 1</td><td><a href="#comp">Comparatives</a></td></tr>
+      <tr><td>Too / Enough / Very</td><td><a href="#too">Too/very/enough</a></td></tr>
+      <tr><td>Adjective Clauses 1 (Booklet 2, hafta 8)</td><td><a href="#rel">Relative clauses</a></td></tr>
+      <tr><td>P1A Quiz 1 Revision kağıdı (Ex. 1–10)</td><td>Relative clauses, comparatives, too/very, articles + tenses, diyalog tense, quantifiers</td></tr>
+    </table></div>
+  </div>
+
+  <div class="part-head sub-head"><span class="eyebrow">Konu anlatımları</span><h2>Kurallar, örnekler, tuzaklar</h2></div>
+
+
+  <div class="topic" id="rel">
+    <h3>Relative (adjective) clauses: who / which / that</h3>
+    <span class="src">Hafta 8 · CC Booklet "Adjective Clauses 1" · Revision Ex. 1–2</span>
+    <p>Bir ismi tanımlayan, ismin hemen arkasından gelen cümlecik.</p>
+    <ul>
+      <li><b>who</b> → insanlar. <span class="ex">The woman <b>who</b> lives next door is a nurse.</span></li>
+      <li><b>which</b> → eşyalar, hayvanlar. <span class="ex">The book <b>which</b> is on the table is mine.</span></li>
+      <li><b>that</b> → ikisi için de olur. <span class="ex">The man <b>that</b> helped us… / The phone <b>that</b> I bought…</span></li>
+    </ul>
+    <div class="tbl"><table>
+      <tr><th>Durum</th><th>Nasıl anlarım?</th><th>Zamir atılır mı?</th></tr>
+      <tr><td><b>Subject</b></td><td>who/which/that'ten hemen sonra <b>fiil</b> gelir.<br><span class="ex">The girl <b>who sits</b> next to me…</span></td><td><span class="wrong">Atılamaz</span></td></tr>
+      <tr><td><b>Object</b></td><td>who/which/that'ten sonra <b>yeni özne + fiil</b> gelir.<br><span class="ex">The film <b>(that) we watched</b>…</span></td><td><span class="right">Atılabilir (Ø)</span></td></tr>
+    </table></div>
+    <p><b>Cümle birleştirme</b> (Revision Ex. 2 tipi): ikinci cümledeki tekrar eden kelimeyi (he, she, it, him, them) sil, yerine zamiri koy ve ismin hemen arkasına yerleştir.</p>
+    <p class="ex">The man works at our school. You met <b>him</b> at the party. → The man <b>(who/that/Ø) you met at the party</b> works at our school.</p>
+    <p class="ex">The woman is a scientist. <b>She</b> discovered a new medicine. → The woman <b>who discovered a new medicine</b> is a scientist.</p>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li>Fazladan zamir bırakma: <span class="wrong">The shoes I bought <u>them</u> were expensive.</span> → <span class="right">The shoes I bought were expensive.</span></li>
+        <li>İnsan için which: <span class="wrong">The man which helped us</span> → <span class="right">who / that</span></li>
+        <li>Fiil, nitelenen isme uyar: <span class="ex">I have a neighbor who <b>doesn't</b> like music.</span> / <span class="ex">two sons who <b>love</b> football.</span> <span class="wrong">who sit</span> → <span class="right">The girl who sits</span></li>
+        <li>Ana cümlenin fiili ilk isme uyar: <span class="ex">The students who passed the exam <b>were</b> happy.</span></li>
+        <li>Subject konumundaki zamiri silme: <span class="wrong">The woman lives next door is a singer.</span> → <span class="right">The woman <b>who</b> lives next door is a singer.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="comp">
+    <h3>Comparatives &amp; superlatives (sıfat ve zarf)</h3>
+    <span class="src">Hafta 6 · FoG2 Units 31, 34 · Revision Ex. 3–5, 10</span>
+    <div class="tbl"><table>
+      <tr><th>Sıfat tipi</th><th>Comparative (+ than)</th><th>Superlative (the …)</th></tr>
+      <tr><td>Tek heceli</td><td>cheap → cheap<b>er</b>, big → bi<b>gg</b>er</td><td>the cheap<b>est</b>, the bi<b>gg</b>est</td></tr>
+      <tr><td>-y ile biten</td><td>easy → eas<b>ier</b>, funny → funn<b>ier</b></td><td>the eas<b>iest</b>, the funn<b>iest</b></td></tr>
+      <tr><td>-e ile biten</td><td>simple → simple<b>r</b>, large → large<b>r</b></td><td>the simple<b>st</b></td></tr>
+      <tr><td>2+ heceli</td><td><b>more</b> popular, <b>more</b> comfortable</td><td><b>the most</b> popular</td></tr>
+      <tr><td>Düzensiz</td><td>good → <b>better</b>, bad → <b>worse</b>, far → <b>farther/further</b></td><td><b>the best</b>, <b>the worst</b>, <b>the farthest/furthest</b></td></tr>
+    </table></div>
+    <ul>
+      <li><b>-ly zarflar</b> (fiili niteler): <b>more</b> quickly / carefully / politely <b>than</b>. <span class="ex">He climbed <b>more carefully than</b> us.</span></li>
+      <li>İstisnalar (-ly almaz): fast → <b>faster</b>, hard → <b>harder</b>, early → <b>earlier</b>.</li>
+      <li>Ters yön: <b>less</b> + sıfat. <span class="ex">This hotel is <b>less comfortable than</b> the old one.</span></li>
+      <li><b>one of the</b> + superlative + <b>çoğul isim</b>: <span class="ex">one of <b>the most popular hotels</b> in the area</span></li>
+      <li>Superlative'in yanında sık gelenler: <b>of all</b>, <b>in the world / in the class</b>.</li>
+    </ul>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li><span class="wrong">more cheaper</span>, <span class="wrong">the most smallest</span>, <span class="wrong">more small than</span>: iki işaret birden olmaz.</li>
+        <li>Superlative'te <b>the</b> unutulmaz: <span class="right">the ugliest orchid</span>.</li>
+        <li>Revision Ex. 5'teki gibi "ADD or CHANGE words <u>when necessary</u>": boşluğa gerekiyorsa <b>than</b> veya <b>the</b> de yazılır. <span class="ex">(good) of all → the best</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="too">
+    <h3>Too / very / enough</h3>
+    <span class="src">Hafta 7 · CC Booklet "Too/Enough/Very" · Revision Ex. 6</span>
+    <ul>
+      <li><b>very</b> + sıfat: sadece vurgu, <u>yapılabiliyor</u>. <span class="ex">The hotel was <b>very</b> expensive, but we managed to afford it.</span></li>
+      <li><b>too</b> + sıfat (+ to V1): gereğinden fazla, <u>yapılamıyor</u>. <span class="ex">The coffee is <b>too</b> hot. I can't drink it.</span></li>
+      <li>sıfat + <b>enough</b>: yeterince. <span class="ex">He isn't old <b>enough</b> to drive.</span></li>
+      <li><b>enough</b> + isim: <span class="ex">We don't have <b>enough</b> chairs.</span></li>
+    </ul>
+    <div class="tip"><span class="lbl">Karar kuralı</span><p>İkinci cümleye bak. "Yapamıyorum, kimse cevaplayamadı, kısar mısın" gibi bir <b>olumsuz sonuç</b> varsa → <b>too</b>. "But we managed, I really enjoyed it" gibi <b>olumlu</b> sonuç varsa → <b>very</b>.</p></div>
+  </div>
+
+  <div class="topic" id="art">
+    <h3>Articles: a / an / the / Ø</h3>
+    <span class="src">Hafta 1–3 · CC Booklet "Articles 1" · Revision Ex. 7 · Azar Ch. 7</span>
+    <div class="tbl"><table>
+      <tr><th>Article</th><th>Ne zaman</th><th>Örnek</th></tr>
+      <tr><td class="w">a / an</td><td>Tekil sayılabilen isim, ilk kez bahsediliyor; meslekler. <b>Okunuşa</b> bakılır.</td><td>a university, a unique job · an hour, an honest man, an engineer</td></tr>
+      <tr><td class="w">the</td><td>Daha önce geçen veya herkesin bildiği şey; tek olan (the sun); sıra sayıları, superlative; müzik aletleri; çoğul ve birleşik ülke adları; nehirler, denizler, okyanuslar</td><td>the first, the best, play the guitar, the USA, the UK, the Netherlands, the Black Sea</td></tr>
+      <tr><td class="w">Ø</td><td>Genel anlamda çoğul ve sayılamayan isimler; şehir, tekil ülke, dil, öğün; kalıplar</td><td>Milk is healthy. · in Istanbul, Spain · have dinner · go to bed · at school/work/home · at night</td></tr>
+    </table></div>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li>Revision Ex. 7 karışık: <b>a/an/the/Ø</b> boşlukları ile <b>fiil çekimi</b> boşlukları aynı metinde. Her boşlukta parantezin içine bak.</li>
+        <li><span class="ex">all <b>Ø</b> streets</span>, <span class="ex">getting to <b>Ø</b> work</span>, <span class="ex"><b>the</b> amount of rain</span>, <span class="ex"><b>Ø</b> extreme weather events</span> (genel, çoğul).</li>
+        <li>Tek dağ, göl, şehir, ülke: Ø (<span class="ex">Lake Como, Mount Baker, Prague</span>). Ama <span class="ex"><b>the</b> Czech Republic</span>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="quant">
+    <h3>Quantifiers + countable / uncountable</h3>
+    <span class="src">Hafta 3–4 · FoG2 Units 26–27 · CC Booklet "Quantifiers 1" · Revision Ex. 10</span>
+    <div class="tbl"><table>
+      <tr><th></th><th>Sayılabilen (çoğul)</th><th>Sayılamayan</th></tr>
+      <tr><td><b>çok</b></td><td>many, a lot of</td><td>much, a lot of</td></tr>
+      <tr><td><b>biraz / birkaç</b></td><td>a few</td><td>a little</td></tr>
+      <tr><td><b>fazla</b></td><td>too many</td><td>too much</td></tr>
+      <tr><td><b>soru</b></td><td>How many…?</td><td>How much…?</td></tr>
+    </table></div>
+    <ul>
+      <li><b>some</b>: olumlu cümle, teklif ve rica. <span class="ex">Would you like <b>some</b> tea?</span></li>
+      <li><b>any</b>: olumsuz ve soru. <span class="ex">There aren't <b>any</b> eggs.</span></li>
+      <li><b>no</b> = not any, fiil olumlu kalır. <span class="ex">There is <b>no</b> milk.</span></li>
+      <li><b>some of / most of / all of</b> + the/them: <span class="ex"><b>all of</b> them are epiphytic</span></li>
+    </ul>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li>Sayılamayan isimler çoğul olmaz: <span class="wrong">equipments</span>, <span class="wrong">informations</span>, <span class="wrong">advices</span>, <span class="wrong">homeworks</span>.</li>
+        <li><span class="wrong">a lettuce</span> değil: <span class="right">some lettuce</span>; <span class="right">some helpful information</span>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="tense">
+    <h3>Present simple · present continuous · past simple · stative verbs</h3>
+    <span class="src">Hafta 1–5 · FoG2 Units 1–3, 8–10, 15–21 · Revision Ex. 8–9 (diyalog boşluk doldurma)</span>
+    <div class="tbl"><table>
+      <tr><th>Tense</th><th>Ne için</th><th>İpucu kelimeler</th></tr>
+      <tr><td class="w">Present simple</td><td>Alışkanlık, genel gerçek</td><td>always, usually, often, never, every day, twice a week</td></tr>
+      <tr><td class="w">Present continuous</td><td>Şu an veya bu sıralar</td><td>now, right now, Look!, Listen!, at the moment, nowadays, this week</td></tr>
+      <tr><td class="w">Past simple</td><td>Geçmişte bitmiş</td><td>yesterday, last week, ago, in 2020, when I was…</td></tr>
+    </table></div>
+    <p><b>Stative (durum) fiiller -ing almaz:</b> want, need, prefer, like, love, hate, know, understand, believe, remember, own, seem, sound.</p>
+    <div class="tbl"><table>
+      <tr><th>Fiil</th><th>Durum (-ing YOK)</th><th>Eylem (-ing OLUR)</th></tr>
+      <tr><td class="w">think</td><td>I <b>think</b> it's great. (fikir)</td><td>I'm <b>thinking</b> about buying a tent.</td></tr>
+      <tr><td class="w">have</td><td>I <b>have</b> a car. (sahiplik)</td><td>We're <b>having</b> dinner / a shower / fun.</td></tr>
+      <tr><td class="w">look</td><td>It <b>looks</b> high quality. (görünmek)</td><td>She's <b>looking</b> at the map.</td></tr>
+      <tr><td class="w">smell / taste</td><td>The soup <b>smells</b> delicious.</td><td>He's <b>smelling</b> the flowers.</td></tr>
+      <tr><td class="w">see</td><td>I <b>see</b> what you mean.</td><td>I'm <b>seeing</b> the doctor at 5.</td></tr>
+    </table></div>
+    <p><b>Mutlaka bil (düzensiz):</b> wake–woke, leave–left, fall–fell, get–got, feel–felt, take–took, think–thought, buy–bought, make–made, come–came, begin–began, find–found, swim–swam, sit–sat, upset–upset.</p>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li><b>found</b> (kurmak) düzenli: found → <b>founded</b>. find'ın geçmişi <b>found</b> ile karışmasın.</li>
+        <li>Parantezde soru varsa soru kur: <span class="ex">(what/you/do) → <b>What are you doing</b></span>, <span class="ex">(where/you/buy) → <b>Where did you buy</b></span>, <span class="ex">(you/be) OK? → <b>Are you</b></span></li>
+        <li><b>can't</b> + geçmiş = <b>couldn't</b>: <span class="ex">(can/not/study) → <b>couldn't study</b></span></li>
+        <li>Everyone, nobody, one of the… + <b>tekil fiil</b>: <span class="ex">Everyone <b>needs</b>, One of the biggest problems <b>was</b></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="fut">
+    <h3>Future: will · be going to · present continuous</h3>
+    <span class="src">Hafta 8 · FoG2 Units 22–23</span>
+    <div class="tbl"><table>
+      <tr><th>Yapı</th><th>Ne için</th><th>Örnek</th></tr>
+      <tr><td class="w">be going to</td><td>Önceden verilmiş karar, plan · <b>kanıta dayalı</b> tahmin</td><td>I'm going to start a diet on Monday. · Look at those clouds! It's going to rain.</td></tr>
+      <tr><td class="w">will</td><td><b>Anlık</b> karar, teklif, söz, kanıtsız tahmin (I think, probably)</td><td>The bags look heavy. I'll carry them. · I'll never tell anyone. · People will live on Mars.</td></tr>
+      <tr><td class="w">won't</td><td>Reddetme, çalışmama</td><td>The car <b>won't</b> start.</td></tr>
+      <tr><td class="w">present continuous</td><td>Zamanı, yeri ayarlanmış randevu</td><td>We're flying to Paris tomorrow morning.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="topic" id="pron">
+    <h3>Pronouns &amp; possessives</h3>
+    <span class="src">FoG2 Unit 12 · CC Booklet "Pronouns and Possessive Adjectives" · Azar Ch. 8</span>
+    <div class="tbl"><table>
+      <tr><th>Subject</th><th>Object</th><th>Possessive adj. (+ isim)</th><th>Possessive pron. (isimsiz)</th></tr>
+      <tr><td>I</td><td>me</td><td>my</td><td>mine</td></tr>
+      <tr><td>you</td><td>you</td><td>your</td><td>yours</td></tr>
+      <tr><td>he / she / it</td><td>him / her / it</td><td>his / her / its</td><td>his / hers / —</td></tr>
+      <tr><td>we</td><td>us</td><td>our</td><td>ours</td></tr>
+      <tr><td>they</td><td>them</td><td>their</td><td>theirs</td></tr>
+    </table></div>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li><b>Whose</b> (kimin) ≠ <b>Who's</b> (who is). <b>its</b> ≠ <b>it's</b>. <b>their</b> ≠ <b>there</b> ≠ <b>they're</b>.</li>
+        <li>İsimsiz kullanımda: <span class="ex">This pen is <b>hers</b>.</span> <span class="wrong">her's</span>, <span class="wrong">yours's</span> diye bir şey yok.</li>
+        <li>Tekil iyelik <b>'s</b> (Tom's tablet), çoğul iyelik <b>s'</b> (my parents' friends).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="basic">
+    <h3>Temel yapılar (hafta 1–3)</h3>
+    <span class="src">FoG2 Units 1–2, 8–13 · CC Booklet</span>
+    <ul>
+      <li><b>BE or DO</b>: sıfat, isim, yer ve -ing ile <b>be</b>; normal fiille <b>do/does</b>. <span class="ex"><b>Are</b> you tired? / <b>Does</b> he like football?</span></li>
+      <li><b>There is</b> + tekil/sayılamayan, <b>there are</b> + çoğul. Geçmişte <b>was / were</b>.</li>
+      <li><b>this/these</b> yakın, <b>that/those</b> uzak. Tekil-çoğul uyumu: <span class="ex">these books, that box</span>.</li>
+      <li><b>can / could</b> + V1 (to yok, -s yok): <span class="ex">She <b>can swim</b>. I <b>could</b> read when I was four.</span></li>
+      <li><b>Subject–verb agreement</b>: he/she/it + fiil-s. <span class="ex">My sister <b>works</b>. The people <b>are</b>…</span></li>
+      <li><b>Soru kurma</b>: (Wh-) + yardımcı fiil + özne + fiil. <span class="ex">Where <b>does</b> she <b>live</b>? What <b>did</b> you <b>buy</b>?</span></li>
+    </ul>
+  </div>
+  <div class="topic" id="fognotes">
+    <h3>Focus on Grammar 2'nin Grammar Notes'larından ek kurallar</h3>
+    <span class="src">Kitabın kendisinden kontrol edildi: Units 3, 13, 22–23, 26–27, 31, 34</span>
+    <div class="grid2">
+      <div class="mini"><h4>Comparatives (Unit 31)</h4>
+        <ul>
+          <li>Farkı büyütmek için <b>much</b> + comparative: <span class="ex">much larger, much more diverse</span></li>
+          <li>Aynı şeyleri karşılaştır: <span class="ex">John's home is larger than <b>William's</b>.</span> <span class="wrong">than William</span></li>
+          <li>than + zamir: resmi <span class="ex">than <b>she is</b></span>, günlük <span class="ex">than <b>her</b></span></li>
+          <li>Soru: <span class="ex"><b>Which city</b> is larger, Tokyo <b>or</b> Seoul?</span></li>
+        </ul></div>
+      <div class="mini"><h4>Superlatives (Unit 34)</h4>
+        <ul>
+          <li><b>the</b> + -est / most + <b>in</b> + yer/grup: <span class="ex">the tallest building <b>in</b> the world</span></li>
+          <li><b>of</b> + sayı/çoğul: <span class="ex">the best <b>of all</b>, the oldest <b>of</b> the three</span></li>
+          <li><b>one of the</b> + superlative + çoğul isim</li>
+          <li>Ters yön: <b>the least</b> + sıfat: <span class="ex">the least expensive</span></li>
+        </ul></div>
+      <div class="mini"><h4>Quantifiers (Units 26–27)</h4>
+        <ul>
+          <li>Kısa cevapta <b>A lot.</b> <span class="wrong">A lot of.</span></li>
+          <li>Kısa cevap: <span class="ex">How much milk is left? <b>Not much.</b> / How many? <b>Not many.</b></span></li>
+          <li>Olumlu cümlede much yerine <b>a lot of</b>: <span class="ex">There's a lot of milk.</span> <span class="wrong">There is much milk.</span></li>
+          <li>Sayılamayanı saymak: <span class="ex">a glass of, a cup of, a bottle of, a box of, a liter of, a piece of</span> → <span class="ex">two glasses of lemonade</span></li>
+        </ul></div>
+      <div class="mini"><h4>Can / Could (Unit 13)</h4>
+        <ul>
+          <li>Soru: <span class="ex"><b>Can</b> an elephant swim? Yes, it <b>can</b>. / <b>Could</b> you speak English last year? No, I <b>couldn't</b>.</span></li>
+          <li>Telaffuz: can /kən/ zayıf, fiil vurgulu · can't /kænt/ vurgulu</li>
+        </ul></div>
+      <div class="mini"><h4>Will (Unit 23)</h4>
+        <ul>
+          <li>Anlamları: gelecek gerçek (<span class="ex">The sun will rise at 6:40.</span>), tahmin, söz, rica/teklif (<span class="ex">Will you help me? I'll help.</span>), reddetme (<span class="ex">I won't work after 6.</span>)</li>
+          <li><b>probably</b> will'den sonra, won't'tan önce: <span class="ex">will probably go / probably won't go</span></li>
+          <li>Olumlu kısa cevapta kısaltma yok: <span class="ex">Yes, they will.</span> <span class="wrong">Yes, they'll.</span></li>
+        </ul></div>
+      <div class="mini"><h4>Be going to (Unit 22)</h4>
+        <ul>
+          <li>Soru: <span class="ex"><b>Are</b> you <b>going to</b> study tonight? Yes, I am.</span> <span class="ex">What <b>is</b> she <b>going to</b> do?</span></li>
+          <li>Zaman ifadeleri: tonight, tomorrow, next week, in two days, this weekend</li>
+        </ul></div>
+      <div class="mini"><h4>Was / Were (Unit 3)</h4>
+        <ul>
+          <li>I/he/she/it <b>was</b> · you/we/they <b>were</b> · there was / there were</li>
+          <li>Soru: <span class="ex">Were you at home? No, I wasn't. Where were you?</span></li>
+        </ul></div>
+    </div>
+  </div>
+
+  <div class="topic" id="plural">
+    <h3>Çoğul isimler (singular → plural)</h3>
+    <span class="src">CC Booklet: Nouns and Indefinite Articles, Singular–Plural Practice · High Note Welcome</span>
+    <div class="tbl"><table>
+      <tr><th>Kural</th><th>Örnek</th></tr>
+      <tr><td>Genelde <b>-s</b></td><td>dog → dogs, desk → desks</td></tr>
+      <tr><td>-sh, -ch, -ss, -x, -o → <b>-es</b></td><td>dish → dishes, match → matches, class → classes, box → boxes, tomato → tomatoes · <i>ama</i> kilo → kilos, radio → radios, piano → pianos</td></tr>
+      <tr><td>sessiz + y → <b>-ies</b></td><td>baby → babies, city → cities, story → stories</td></tr>
+      <tr><td>sesli + y → <b>-s</b></td><td>toy → toys, journey → journeys, monkey → monkeys</td></tr>
+      <tr><td>-f / -fe → <b>-ves</b></td><td>leaf → leaves, thief → thieves, wolf → wolves, knife → knives, wife → wives, life → lives · <i>ama</i> belief → beliefs, roof → roofs</td></tr>
+      <tr><td>Düzensiz</td><td>man → men, woman → women, child → children, person → people, tooth → teeth, foot → feet, goose → geese, mouse → mice, ox → oxen</td></tr>
+      <tr><td>Değişmeyen</td><td>fish → fish, sheep → sheep, deer → deer, series → series</td></tr>
+    </table></div>
+  </div>
+
+  <div class="topic" id="sva">
+    <h3>Subject–verb agreement (özne–fiil uyumu)</h3>
+    <span class="src">CC Booklet: Subject–Verb Agreement 1 (8 kural)</span>
+    <ol>
+      <li>Tek kişi/şey → tekil fiil: <span class="ex">My mother <b>drives</b> to work.</span></li>
+      <li>İki veya daha fazla → çoğul fiil: <span class="ex">My parents <b>drive</b> to work.</span></li>
+      <li>Düzensiz çoğullar (children, people, women, men) → çoğul fiil: <span class="ex">People <b>are</b> worried.</span></li>
+      <li><b>and</b> ile bağlanan iki özne → çoğul fiil: <span class="ex">Tom and Jack <b>play</b> basketball. My sister and I <b>walk</b> to school.</span></li>
+      <li>Öznenin arkasında iki fiil varsa ikisi de uyar: <span class="ex">My brother <b>plays</b> football and <b>watches</b> TV.</span></li>
+      <li>Gruptan bir kişi → tekil fiil: <span class="ex">One of my friends <b>has</b> a new bike.</span></li>
+      <li>in / of / at … ile uzayan özne → <b>ana isme</b> bak: <span class="ex">People from my country <b>are</b> friendly. The plates in the kitchen <b>are</b> dirty. The new teacher at our school <b>helps</b> students.</span></li>
+      <li>every-, some-, any-, no- zamirleri → tekil fiil: <span class="ex">Everybody <b>seems</b> happy. Does anyone <b>have</b> a pen?</span></li>
+    </ol>
+  </div>
+
+  <div class="topic" id="qform">
+    <h3>Soru kurma</h3>
+    <span class="src">CC Booklet: Question Formation · FoG2 Units 2, 9, 10, 16, 20 · High Note 1, 5</span>
+    <ul>
+      <li>Kalıp: <b>(Wh-) + yardımcı fiil + özne + fiil</b>. <span class="ex">How often <b>do you speak</b> English? What <b>are you</b> feeling right now?</span></li>
+      <li>be ile: be başa gelir. <span class="ex">Where <b>is</b> he from? <b>Were</b> you at home last night?</span></li>
+      <li>Altı çizili bilgiye soru (booklet Ex. 4): <span class="ex">He trains <u>two hours a day</u>. → <b>How long does he train</b> a day? · He swims <u>6 km a week</u>. → <b>How many kilometers does he swim</b> a week? · He is <u>170 cm</u> tall. → <b>How tall is he</b>?</span></li>
+      <li>Wh- kelimeleri: what (ne), where (nerede), when (ne zaman), who (kim), whose (kimin), why (neden), how (nasıl), how often (ne sıklıkla), how much / how many (ne kadar / kaç), what kind of (ne tür).</li>
+      <li>Kısa cevaplar: <span class="ex">Yes, I do. / No, she doesn't. / Yes, they are. / No, I wasn't. / Yes, I can.</span></li>
+    </ul>
+    <div class="trap"><span class="lbl">Tuzaklar</span>
+      <ul>
+        <li>Soruda fiil yalın kalır: <span class="wrong">Does he likes</span> → <span class="right">Does he like</span>, <span class="wrong">Did you went</span> → <span class="right">Did you go</span>.</li>
+        <li>Özneyi soruyorsan yardımcı fiil yok: <span class="ex"><b>Who lives</b> next door? (özne) / <b>Who did you call</b>? (nesne)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic" id="spell">
+    <h3>Yazım kuralları: -s · -ing · -ed</h3>
+    <span class="src">FoG2 Units 8, 15, 18 · High Note 1 (final 's') · High Note 5 (-ed endings)</span>
+    <div class="tbl"><table>
+      <tr><th></th><th>Kural</th><th>Örnek</th></tr>
+      <tr><td class="w">-s (he/she/it)</td><td>-sh, -ch, -ss, -x, -o → -es · sessiz + y → -ies · have → has</td><td>watches, goes, does, fixes · studies, tries · <i>ama</i> plays</td></tr>
+      <tr><td class="w">-ing</td><td>sessiz -e düşer · tek hece sessiz-sesli-sessiz → son harf ikilenir · -ie → -ying</td><td>make → making · run → running, swim → swimming, sit → sitting · lie → lying, die → dying</td></tr>
+      <tr><td class="w">-ed</td><td>-e → -d · sessiz + y → -ied · tek hece sessiz-sesli-sessiz → ikilenir</td><td>live → lived · study → studied · <i>ama</i> play → played · stop → stopped, plan → planned</td></tr>
+    </table></div>
+    <p><b>-ed okunuşu:</b> /t/ (worked, watched, stopped) · /d/ (played, lived, cleaned) · /ɪd/ sadece -t veya -d ile bitenlerde (wanted, needed, started).</p>
+  </div>
+
+  <div class="topic" id="freq">
+    <h3>Adverbs of frequency (sıklık zarfları)</h3>
+    <span class="src">High Note Unit 1 (s. 15) · FoG2 Units 8–10</span>
+    <p>always (%100) → usually → often → sometimes → hardly ever → never (%0)</p>
+    <ul>
+      <li>Normal fiilin <b>önüne</b>: <span class="ex">I <b>usually get up</b> at 7. She <b>never drinks</b> coffee.</span></li>
+      <li><b>be</b>'nin <b>arkasına</b>: <span class="ex">He <b>is always</b> late. They <b>are often</b> tired.</span></li>
+      <li>Soruda: <span class="ex">How often do you…? Do you <b>usually</b> …?</span></li>
+      <li>Sıklık ifadeleri cümle sonunda: <span class="ex">once a week, twice a month, three times a year, every day</span></li>
+    </ul>
+  </div>
+
+  <div class="topic" id="prep">
+    <h3>Prepositions of place (yer edatları)</h3>
+    <span class="src">High Note Unit 2 (s. 26)</span>
+    <p>in (içinde) · on (üstünde) · under (altında) · next to (yanında) · between (arasında) · behind (arkasında) · in front of (önünde) · opposite (karşısında) · above (yukarısında) · near (yakınında)</p>
+    <p class="ex">The lamp is <b>between</b> the bed and the wardrobe. The café is <b>opposite</b> the bank. The cat is <b>under</b> the table.</p>
+  </div>
+
+  <div class="topic" id="havegot">
+    <h3><i>Have got</i> · possessive 's</h3>
+    <span class="src">High Note Welcome (0C)</span>
+    <ul>
+      <li>I/you/we/they <b>have got</b> · he/she/it <b>has got</b>. Olumsuz: haven't got / hasn't got. Soru: <span class="ex"><b>Have</b> you <b>got</b> a pen? Yes, I have. / <b>Has</b> she <b>got</b> a car? No, she hasn't.</span></li>
+      <li><b>'s</b> tekil sahiplik: <span class="ex">Tom's tablet</span> · <b>s'</b> -s ile biten çoğul: <span class="ex">my parents' friends</span> · düzensiz çoğul: <span class="ex">the children's toys</span></li>
+    </ul>
+  </div>
+
+  <div class="topic" id="imper">
+    <h3>Imperatives (emir cümleleri)</h3>
+    <span class="src">High Note Welcome (0D)</span>
+    <p>Özne yok, fiil yalın: <span class="ex"><b>Read</b> the instructions. <b>Open</b> your books.</span> Olumsuz: <b>Don't</b> + fiil: <span class="ex"><b>Don't</b> leave it to the last minute.</span></p>
+  </div>
+
+  <div class="topic" id="manner">
+    <h3>Adverbs of manner (durum zarfları)</h3>
+    <span class="src">High Note Unit 8 (s. 105)</span>
+    <ul>
+      <li>Sıfat + <b>-ly</b>: quick → quickly, careful → carefully, polite → politely, loud → loudly, slow → slowly, safe → safely, confident → confidently, urgent → urgently</li>
+      <li>-y → <b>-ily</b>: happy → happily, healthy → healthily, easy → easily · -le → -ly: gentle → gently · perfect → perfectly</li>
+      <li>Düzensiz: good → <b>well</b>, fast → <b>fast</b>, hard → <b>hard</b>, early → <b>early</b>, late → <b>late</b></li>
+      <li>Yeri: fiilin (ve nesnenin) arkası: <span class="ex">She speaks English <b>fluently</b>. He drives <b>carefully</b>.</span></li>
+      <li>Sıfat isimden önce, zarf fiilden sonra: <span class="ex">a <b>careful</b> driver / He drives <b>carefully</b>.</span> be, look, feel, seem + <b>sıfat</b>: <span class="ex">You look <b>happy</b>.</span></li>
+    </ul>
+    <div class="trap"><span class="lbl">Tuzak</span><p><span class="wrong">hardly</span> = hard değil, "neredeyse hiç" demek. <span class="wrong">fastly</span>, <span class="wrong">goodly</span> diye kelime yok.</p></div>
+  </div>
+
+</section>
+
+<!-- VOCAB -->
+<section class="part" id="vocab">
+  <div class="part-head"><span class="eyebrow">Bölüm 2</span><h2>Vocabulary</h2></div>
+  <div class="tip"><span class="lbl">Boşluğa bakış</span>
+    <p><b>a / an / the / my</b> + ___ → <b>isim</b> · <b>very / so / feel / become</b> + ___ → <b>sıfat</b> · <b>can / to / don't</b> + ___ → <b>yalın fiil</b> · fiili niteliyorsa → <b>-ly zarf</b>. Sonra bir sonraki cümleyi oku: genelde kelimeyi açıklıyor.</p>
+    <p>Sınav formatı (mock exam): <b>A</b> listeden kelime, form değişmez, 2 fazla kelime · <b>B</b> listeden kelime, <b>doğru formda</b> (-ing, -ed, -s) · <b>C</b> doğru kelime türü · <b>D</b> phrasal verb.</p>
+  </div>
+
+  <div class="part-head sub-head" id="v-hn"><span class="eyebrow">V1</span><h2>High Note 1</h2><span class="src">Duyuru: "High Note 1: Units stated in the syllabus (Weeks 1–8)"</span></div>
+  <div class="topic" id="hn1">
+<div class="group-title"><h3>High Note 1 · Units 1–8 tam Word List</h3><span class="src">Kitabın kendi Word List sayfalarından (s. 21, 33, 47, 59, 73, 85, 99, 111)</span></div>
+<p>Syllabus'ta atlanan bölümler <span class="skip-tag">atlandı</span> etiketiyle işaretli: Unit 1, s. 18–19. Life Skills sayfaları opsiyonel ve kitapta Word List'e girmiyor. Welcome Unit (s. 4–11): ülkeler ve milliyetler, kişisel eşyalar, temel sıfatlar, aile ve meslekler, sınıf talimatları, günler, aylar, mevsimler, sıra sayıları.</p>
+<details class="unit" open><summary><span class="u-title">Unit 1: The things we do</span><span class="src">Word List s. 21</span></summary>
+<h4 class="sub">1A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>activity</b> <span>etkinlik</span></li><li><b>amazing</b> <span>harika</span></li><li><b>before/after school</b> <span>okuldan önce/sonra</span></li><li><b>come from sth</b> <span>-den gelmek</span></li><li><b>do exercise</b> <span>egzersiz yapmak</span></li><li><b>do homework</b> <span>ödev yapmak</span></li><li><b>do housework</b> <span>ev işi yapmak</span></li><li><b>extra lessons</b> <span>ek ders</span></li><li><b>free time</b> <span>boş zaman</span></li><li><b>get dressed</b> <span>giyinmek</span></li><li><b>get home</b> <span>eve varmak</span></li><li><b>get up</b> <span>kalkmak</span></li><li><b>go home</b> <span>eve gitmek</span></li><li><b>go out with friends</b> <span>arkadaşlarla çıkmak</span></li><li><b>go shopping</b> <span>alışverişe gitmek</span></li><li><b>go to a club</b> <span>kulübe gitmek</span></li><li><b>go to bed</b> <span>yatmak</span></li><li><b>go to school/work</b> <span>okula/işe gitmek</span></li><li><b>have a shower</b> <span>duş almak</span></li><li><b>have breakfast/lunch/dinner</b> <span>kahvaltı/öğle/akşam yemeği yemek</span></li><li><b>have lessons</b> <span>dersi olmak</span></li><li><b>life</b> <span>hayat</span></li><li><b>meal</b> <span>öğün</span></li><li><b>play chess</b> <span>satranç oynamak</span></li><li><b>routine</b> <span>rutin</span></li><li><b>schoolday</b> <span>okul günü</span></li><li><b>start</b> <span>başlamak</span></li><li><b>study</b> <span>ders çalışmak</span></li><li><b>unusual</b> <span>alışılmadık</span></li><li><b>wear a uniform</b> <span>üniforma giymek</span></li><li><b>world</b> <span>dünya</span></li></ul>
+<h4 class="sub">1B Vocabulary</h4>
+<ul class="wl"><li><b>every month</b> <span>her ay</span></li><li><b>go to a friend&#x27;s house/the cinema/a party/a concert</b> <span>arkadaşa/sinemaya/partiye/konsere gitmek</span></li><li><b>hang out with friends</b> <span>arkadaşlarla takılmak</span></li><li><b>have a guitar lesson</b> <span>gitar dersi almak</span></li><li><b>late</b> <span>geç</span></li><li><b>listen to music</b> <span>müzik dinlemek</span></li><li><b>once/twice/three times a week</b> <span>haftada bir/iki/üç kez</span></li><li><b>play computer games</b> <span>bilgisayar oyunu oynamak</span></li><li><b>play games on your mobile phone</b> <span>telefonda oyun oynamak</span></li><li><b>play sport/tennis/football</b> <span>spor/tenis/futbol oynamak</span></li><li><b>read a book</b> <span>kitap okumak</span></li><li><b>spend</b> <span>(zaman/para) harcamak</span></li><li><b>watch TV/a film</b> <span>TV/film izlemek</span></li><li><b>write a blog</b> <span>blog yazmak</span></li></ul>
+<h4 class="sub">1C Grammar</h4>
+<ul class="wl"><li><b>addict</b> <span>bağımlı</span></li><li><b>answer</b> <span>cevap</span></li><li><b>check your phone</b> <span>telefonuna bakmak</span></li><li><b>die</b> <span>ölmek</span></li><li><b>feel bad</b> <span>kötü hissetmek</span></li><li><b>feel nervous</b> <span>gergin hissetmek</span></li><li><b>get a signal</b> <span>sinyal almak</span></li><li><b>miss</b> <span>özlemek, kaçırmak</span></li><li><b>phone battery</b> <span>telefon şarjı</span></li><li><b>quiz</b> <span>test, bilgi yarışması</span></li><li><b>sign</b> <span>işaret</span></li><li><b>sound</b> <span>ses</span></li><li><b>switch off</b> <span>kapatmak</span></li><li><b>take photos</b> <span>fotoğraf çekmek</span></li><li><b>text</b> <span>mesaj (atmak)</span></li><li><b>true</b> <span>doğru</span></li></ul>
+<h4 class="sub">1D Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>adult</b> <span>yetişkin</span></li><li><b>be interested in sth</b> <span>-e ilgi duymak</span></li><li><b>be on the phone</b> <span>telefonda olmak</span></li><li><b>boring</b> <span>sıkıcı</span></li><li><b>care about sth</b> <span>önemsemek</span></li><li><b>celebrity</b> <span>ünlü</span></li><li><b>clothes</b> <span>kıyafetler</span></li><li><b>cycle</b> <span>bisiklet sürmek</span></li><li><b>do sport</b> <span>spor yapmak</span></li><li><b>event</b> <span>etkinlik, olay</span></li><li><b>experience</b> <span>deneyim</span></li><li><b>forget</b> <span>unutmak</span></li><li><b>get back</b> <span>geri dönmek</span></li><li><b>have fun</b> <span>eğlenmek</span></li><li><b>hobby</b> <span>hobi</span></li><li><b>kind of music</b> <span>müzik türü</span></li><li><b>look up</b> <span>(sözlükte) bakmak</span></li><li><b>make a decision</b> <span>karar vermek</span></li><li><b>modern</b> <span>modern</span></li><li><b>newspaper</b> <span>gazete</span></li><li><b>online</b> <span>çevrimiçi</span></li><li><b>put down</b> <span>elinden bırakmak</span></li><li><b>put on (a song)</b> <span>(şarkı) açmak</span></li><li><b>real world</b> <span>gerçek dünya</span></li><li><b>send a message</b> <span>mesaj göndermek</span></li><li><b>similar</b> <span>benzer</span></li><li><b>social network</b> <span>sosyal ağ</span></li><li><b>stay in</b> <span>evde kalmak</span></li><li><b>stereotype</b> <span>kalıp yargı</span></li><li><b>stuff</b> <span>şeyler</span></li><li><b>subject</b> <span>konu, ders</span></li><li><b>taste in music</b> <span>müzik zevki</span></li><li><b>team</b> <span>takım</span></li><li><b>teenager</b> <span>genç</span></li><li><b>terrible</b> <span>berbat</span></li><li><b>the news</b> <span>haberler</span></li><li><b>unhealthy food</b> <span>sağlıksız yiyecek</span></li><li><b>useful</b> <span>faydalı</span></li><li><b>waste</b> <span>israf (etmek)</span></li><li><b>worry about sth</b> <span>-den endişelenmek</span></li></ul>
+<h4 class="sub">1E Speaking <span class="skip-tag">atlandı</span></h4>
+<ul class="wl"><li><b>cinema ticket</b> <span>sinema bileti</span></li><li><b>enjoy</b> <span>keyif almak</span></li><li><b>expensive</b> <span>pahalı</span></li><li><b>fantasy book</b> <span>fantastik kitap</span></li><li><b>good idea</b> <span>iyi fikir</span></li><li><b>next week</b> <span>gelecek hafta</span></li><li><b>present for sb</b> <span>birine hediye</span></li></ul>
+<h4 class="sub">1F Listening &amp; Vocabulary <span class="skip-tag">atlandı</span></h4>
+<ul class="wl"><li><b>agree with sb</b> <span>-e katılmak</span></li><li><b>dream about sth</b> <span>hayal etmek</span></li><li><b>family member</b> <span>aile üyesi</span></li><li><b>guilty pleasure</b> <span>gizli zevk</span></li><li><b>laugh at sth</b> <span>-e gülmek</span></li><li><b>lifestyle</b> <span>yaşam tarzı</span></li><li><b>tell sb about sth</b> <span>birine bir şeyi anlatmak</span></li><li><b>wait for sb</b> <span>birini beklemek</span></li></ul>
+<h4 class="sub">1G Writing</h4>
+<ul class="wl"><li><b>at college</b> <span>üniversitede</span></li><li><b>fashion</b> <span>moda</span></li><li><b>finish</b> <span>bitirmek</span></li><li><b>good at sth</b> <span>-de iyi</span></li><li><b>personal information</b> <span>kişisel bilgi</span></li><li><b>sports training</b> <span>spor antrenmanı</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 2: No place like home</span><span class="src">Word List s. 33</span></summary>
+<h4 class="sub">2A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>attic</b> <span>çatı katı</span></li><li><b>balcony</b> <span>balkon</span></li><li><b>bathroom</b> <span>banyo</span></li><li><b>bedroom</b> <span>yatak odası</span></li><li><b>ceiling</b> <span>tavan</span></li><li><b>cellar</b> <span>mahzen, bodrum</span></li><li><b>climb up/down</b> <span>tırmanmak/inmek</span></li><li><b>dining room</b> <span>yemek odası</span></li><li><b>door</b> <span>kapı</span></li><li><b>drawing</b> <span>çizim</span></li><li><b>floor</b> <span>kat, zemin</span></li><li><b>front</b> <span>ön</span></li><li><b>garage</b> <span>garaj</span></li><li><b>garden</b> <span>bahçe</span></li><li><b>hall</b> <span>hol</span></li><li><b>high</b> <span>yüksek</span></li><li><b>horse</b> <span>at</span></li><li><b>kitchen</b> <span>mutfak</span></li><li><b>living room</b> <span>oturma odası</span></li><li><b>music studio</b> <span>müzik stüdyosu</span></li><li><b>paint</b> <span>boyamak</span></li><li><b>painting</b> <span>tablo</span></li><li><b>paradise</b> <span>cennet</span></li><li><b>roof</b> <span>çatı</span></li><li><b>speakers</b> <span>hoparlör</span></li><li><b>stairs</b> <span>merdiven</span></li><li><b>straight</b> <span>düz</span></li><li><b>study</b> <span>çalışma odası</span></li><li><b>swimming pool</b> <span>yüzme havuzu</span></li><li><b>terrace</b> <span>teras</span></li><li><b>upstairs/downstairs</b> <span>üst kat/alt kat</span></li><li><b>wall</b> <span>duvar</span></li><li><b>window</b> <span>pencere</span></li></ul>
+<h4 class="sub">2B Vocabulary</h4>
+<ul class="wl"><li><b>armchair</b> <span>koltuk</span></li><li><b>attractive</b> <span>çekici</span></li><li><b>bath</b> <span>küvet</span></li><li><b>behind</b> <span>arkasında</span></li><li><b>between</b> <span>arasında</span></li><li><b>breakfast bar</b> <span>mutfak bankosu</span></li><li><b>carpet</b> <span>halı</span></li><li><b>cooker</b> <span>ocak, fırın</span></li><li><b>cupboard</b> <span>dolap</span></li><li><b>dishwasher</b> <span>bulaşık makinesi</span></li><li><b>fireplace</b> <span>şömine</span></li><li><b>for rent</b> <span>kiralık</span></li><li><b>fridge</b> <span>buzdolabı</span></li><li><b>furniture</b> <span>mobilya (sayılamaz)</span></li><li><b>LED TV</b> <span>LED TV</span></li><li><b>light</b> <span>aydınlık</span></li><li><b>lovely</b> <span>çok güzel</span></li><li><b>microwave</b> <span>mikrodalga</span></li><li><b>mirror</b> <span>ayna</span></li><li><b>next to</b> <span>yanında</span></li><li><b>opposite</b> <span>karşısında</span></li><li><b>perfect</b> <span>mükemmel</span></li><li><b>rug</b> <span>kilim</span></li><li><b>shelf (pl. shelves)</b> <span>raf</span></li><li><b>shower</b> <span>duş</span></li><li><b>sink</b> <span>evye, lavabo</span></li><li><b>sofa</b> <span>kanepe</span></li><li><b>ten-minute walk from</b> <span>-e 10 dk yürüme</span></li><li><b>toilet</b> <span>tuvalet</span></li><li><b>view</b> <span>manzara</span></li><li><b>wardrobe</b> <span>gardırop</span></li><li><b>washbasin</b> <span>lavabo</span></li><li><b>washing machine</b> <span>çamaşır makinesi</span></li></ul>
+<h4 class="sub">2C Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>cook a meal</b> <span>yemek pişirmek</span></li><li><b>do chores</b> <span>ev işi yapmak</span></li><li><b>do the washing-up</b> <span>bulaşık yıkamak</span></li><li><b>keep your room tidy</b> <span>odanı düzenli tutmak</span></li><li><b>leave home</b> <span>evden ayrılmak</span></li><li><b>sweep the floor</b> <span>yeri süpürmek</span></li><li><b>vacuum the carpet</b> <span>halıyı süpürgelemek</span></li><li><b>wash/dry/iron clothes</b> <span>çamaşır yıkamak/kurutmak/ütülemek</span></li></ul>
+<h4 class="sub">2D Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>building</b> <span>bina</span></li><li><b>clean</b> <span>temiz</span></li><li><b>cold</b> <span>soğuk</span></li><li><b>comfortable</b> <span>rahat</span></li><li><b>community</b> <span>topluluk</span></li><li><b>dangerous</b> <span>tehlikeli</span></li><li><b>dark</b> <span>karanlık</span></li><li><b>dirty</b> <span>kirli</span></li><li><b>empty</b> <span>boş</span></li><li><b>familiar atmosphere</b> <span>tanıdık ortam</span></li><li><b>fantastic</b> <span>harika</span></li><li><b>feel homesick</b> <span>evini özlemek</span></li><li><b>flat/apartment</b> <span>daire</span></li><li><b>full of people</b> <span>insan dolu</span></li><li><b>hot</b> <span>sıcak</span></li><li><b>light</b> <span>aydınlık</span></li><li><b>messy</b> <span>dağınık</span></li><li><b>modern</b> <span>modern</span></li><li><b>neighbour</b> <span>komşu</span></li><li><b>noisy</b> <span>gürültülü</span></li><li><b>normal</b> <span>normal</span></li><li><b>object</b> <span>nesne</span></li><li><b>quiet</b> <span>sessiz</span></li><li><b>special</b> <span>özel</span></li><li><b>sunny</b> <span>güneşli</span></li><li><b>terrible</b> <span>berbat</span></li><li><b>tidy</b> <span>düzenli</span></li><li><b>top floor</b> <span>en üst kat</span></li><li><b>traditional</b> <span>geleneksel</span></li><li><b>traffic</b> <span>trafik</span></li><li><b>uncomfortable</b> <span>rahatsız</span></li></ul>
+<h4 class="sub">2E Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>do a questionnaire</b> <span>anket doldurmak</span></li><li><b>do your best</b> <span>elinden geleni yapmak</span></li><li><b>generous</b> <span>cömert</span></li><li><b>habit</b> <span>alışkanlık</span></li><li><b>interests</b> <span>ilgi alanları</span></li><li><b>make a mess</b> <span>ortalığı dağıtmak</span></li><li><b>make a suggestion</b> <span>öneride bulunmak</span></li><li><b>make new friends</b> <span>yeni arkadaş edinmek</span></li><li><b>match</b> <span>eşleşmek, uymak</span></li><li><b>roommate</b> <span>oda arkadaşı</span></li><li><b>share a room</b> <span>oda paylaşmak</span></li></ul>
+<h4 class="sub">2F Speaking</h4>
+<ul class="wl"><li><b>available</b> <span>müsait, mevcut</span></li><li><b>location</b> <span>konum</span></li><li><b>noise</b> <span>gürültü</span></li><li><b>rent</b> <span>kiralamak</span></li><li><b>space</b> <span>alan</span></li></ul>
+<h4 class="sub">2G Writing</h4>
+<ul class="wl"><li><b>cover</b> <span>kapak</span></li><li><b>desk</b> <span>masa</span></li><li><b>poster</b> <span>poster</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 3: Eat in – eat out</span><span class="src">Word List s. 47</span></summary>
+<h4 class="sub">3A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>apple</b> <span>elma</span></li><li><b>banana</b> <span>muz</span></li><li><b>beef</b> <span>sığır eti</span></li><li><b>biscuit</b> <span>bisküvi</span></li><li><b>body weight</b> <span>vücut ağırlığı</span></li><li><b>bread</b> <span>ekmek</span></li><li><b>butter</b> <span>tereyağı</span></li><li><b>cake</b> <span>kek</span></li><li><b>calorie</b> <span>kalori</span></li><li><b>cereal</b> <span>mısır gevreği</span></li><li><b>cheese</b> <span>peynir</span></li><li><b>chicken</b> <span>tavuk</span></li><li><b>chocolate</b> <span>çikolata</span></li><li><b>coffee</b> <span>kahve</span></li><li><b>crisps</b> <span>cips</span></li><li><b>dairy</b> <span>süt ürünleri</span></li><li><b>dessert</b> <span>tatlı</span></li><li><b>diet</b> <span>beslenme, diyet</span></li><li><b>drink</b> <span>içecek, içmek</span></li><li><b>eggs</b> <span>yumurta</span></li><li><b>energy drink</b> <span>enerji içeceği</span></li><li><b>fish</b> <span>balık</span></li><li><b>fruit</b> <span>meyve</span></li><li><b>ham</b> <span>jambon</span></li><li><b>hungry</b> <span>aç</span></li><li><b>ice cream</b> <span>dondurma</span></li><li><b>juice</b> <span>meyve suyu</span></li><li><b>lettuce</b> <span>marul</span></li><li><b>meat</b> <span>et</span></li><li><b>milk</b> <span>süt</span></li><li><b>orange</b> <span>portakal</span></li><li><b>pasta</b> <span>makarna</span></li><li><b>pizza</b> <span>pizza</span></li><li><b>potato</b> <span>patates</span></li><li><b>rice</b> <span>pirinç</span></li><li><b>sardines</b> <span>sardalya</span></li><li><b>snack</b> <span>atıştırmalık</span></li><li><b>spinach</b> <span>ıspanak</span></li><li><b>tea</b> <span>çay</span></li><li><b>sandwich</b> <span>sandviç</span></li><li><b>tomato</b> <span>domates</span></li><li><b>tuna</b> <span>ton balığı</span></li><li><b>vegetables</b> <span>sebzeler</span></li><li><b>water</b> <span>su</span></li><li><b>yoghurt</b> <span>yoğurt</span></li></ul>
+<h4 class="sub">3B Vocabulary</h4>
+<ul class="wl"><li><b>bag</b> <span>poşet</span></li><li><b>bottle</b> <span>şişe</span></li><li><b>box</b> <span>kutu</span></li><li><b>can</b> <span>teneke kutu</span></li><li><b>carton</b> <span>karton kutu</span></li><li><b>free</b> <span>bedava</span></li><li><b>jar</b> <span>kavanoz</span></li><li><b>lemonade</b> <span>limonata</span></li><li><b>mayonnaise</b> <span>mayonez</span></li><li><b>packet</b> <span>paket</span></li><li><b>pence</b> <span>peni</span></li><li><b>pound</b> <span>sterlin</span></li><li><b>price</b> <span>fiyat</span></li><li><b>salad</b> <span>salata</span></li><li><b>special offer</b> <span>özel indirim</span></li><li><b>sweets</b> <span>şekerleme</span></li><li><b>tin</b> <span>konserve kutusu</span></li><li><b>tomato sauce</b> <span>domates sosu</span></li></ul>
+<h4 class="sub">3C Speaking</h4>
+<ul class="wl"><li><b>carrot cake</b> <span>havuçlu kek</span></li><li><b>change</b> <span>para üstü</span></li><li><b>customer</b> <span>müşteri</span></li><li><b>order</b> <span>sipariş (vermek)</span></li><li><b>server</b> <span>garson</span></li><li><b>sparkling/still water</b> <span>maden suyu/sade su</span></li></ul>
+<h4 class="sub">3D Grammar</h4>
+<ul class="wl"><li><b>chips</b> <span>patates kızartması</span></li><li><b>food waste</b> <span>yemek israfı</span></li><li><b>freeze</b> <span>dondurmak</span></li><li><b>keep</b> <span>saklamak</span></li><li><b>leftovers</b> <span>artan yemek</span></li><li><b>shopping list</b> <span>alışveriş listesi</span></li><li><b>smart</b> <span>akıllı, şık</span></li><li><b>store</b> <span>saklamak</span></li><li><b>sugar</b> <span>şeker</span></li><li><b>throw away</b> <span>atmak</span></li><li><b>use-by date</b> <span>son kullanma tarihi</span></li></ul>
+<h4 class="sub">3E Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>baker</b> <span>fırıncı</span></li><li><b>bowl</b> <span>kase</span></li><li><b>butcher</b> <span>kasap</span></li><li><b>chef</b> <span>şef</span></li><li><b>cup</b> <span>fincan</span></li><li><b>dietician</b> <span>diyetisyen</span></li><li><b>equipment</b> <span>ekipman</span></li><li><b>food photographer</b> <span>yemek fotoğrafçısı</span></li><li><b>fork</b> <span>çatal</span></li><li><b>fresh</b> <span>taze</span></li><li><b>glass</b> <span>bardak</span></li><li><b>job</b> <span>iş</span></li><li><b>knife</b> <span>bıçak</span></li><li><b>plate</b> <span>tabak</span></li><li><b>restaurant reviewer</b> <span>restoran eleştirmeni</span></li><li><b>sell</b> <span>satmak</span></li><li><b>spoon</b> <span>kaşık</span></li><li><b>steak</b> <span>biftek</span></li><li><b>waiter</b> <span>garson</span></li></ul>
+<h4 class="sub">3F Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>cheap</b> <span>ucuz</span></li><li><b>collect</b> <span>toplamak</span></li><li><b>cost</b> <span>mal olmak</span></li><li><b>delicious</b> <span>lezzetli</span></li><li><b>dish</b> <span>yemek</span></li><li><b>eat in</b> <span>evde/içeride yemek</span></li><li><b>eat out</b> <span>dışarıda yemek</span></li><li><b>environment</b> <span>çevre</span></li><li><b>ethical</b> <span>etik</span></li><li><b>find out</b> <span>öğrenmek</span></li><li><b>give out</b> <span>dağıtmak</span></li><li><b>give up</b> <span>vazgeçmek</span></li><li><b>help out</b> <span>yardım etmek</span></li><li><b>homeless people</b> <span>evsizler</span></li><li><b>main course</b> <span>ana yemek</span></li><li><b>natural/local ingredients</b> <span>doğal/yerel malzemeler</span></li><li><b>organic</b> <span>organik</span></li><li><b>pizzeria</b> <span>pizzacı</span></li><li><b>search (by sth)</b> <span>aramak</span></li><li><b>serve</b> <span>servis yapmak</span></li><li><b>sit down</b> <span>oturmak</span></li><li><b>spend/save money</b> <span>para harcamak/biriktirmek</span></li><li><b>starter</b> <span>başlangıç yemeği</span></li><li><b>taste</b> <span>tadı olmak, tatmak</span></li><li><b>vegetarian</b> <span>vejetaryen</span></li></ul>
+<h4 class="sub">3G Writing</h4>
+<ul class="wl"><li><b>opening hours</b> <span>açılış saatleri</span></li><li><b>speciality</b> <span>spesiyalite</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 4: School life</span><span class="src">Word List s. 59</span></summary>
+<h4 class="sub">4A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>afterschool club</b> <span>okul sonrası kulüp</span></li><li><b>art room</b> <span>resim odası</span></li><li><b>be late</b> <span>geç kalmak</span></li><li><b>canteen</b> <span>kantin</span></li><li><b>check your timetable</b> <span>ders programına bakmak</span></li><li><b>classroom</b> <span>sınıf</span></li><li><b>computer room</b> <span>bilgisayar odası</span></li><li><b>documentary</b> <span>belgesel</span></li><li><b>gym</b> <span>spor salonu</span></li><li><b>hallway</b> <span>koridor</span></li><li><b>hold on</b> <span>beklemek</span></li><li><b>library</b> <span>kütüphane</span></li><li><b>make a phone call</b> <span>telefon etmek</span></li><li><b>music room</b> <span>müzik odası</span></li><li><b>playing fields</b> <span>oyun sahaları</span></li><li><b>prepare</b> <span>hazırlamak</span></li><li><b>school uniform</b> <span>okul üniforması</span></li><li><b>science lab</b> <span>fen laboratuvarı</span></li><li><b>staffroom</b> <span>öğretmenler odası</span></li><li><b>term</b> <span>dönem</span></li></ul>
+<h4 class="sub">4B Vocabulary</h4>
+<ul class="wl"><li><b>act</b> <span>rol yapmak</span></li><li><b>Art</b> <span>resim</span></li><li><b>atom</b> <span>atom</span></li><li><b>backpack</b> <span>sırt çantası</span></li><li><b>Biology</b> <span>biyoloji</span></li><li><b>calculator</b> <span>hesap makinesi</span></li><li><b>Chemistry</b> <span>kimya</span></li><li><b>climate</b> <span>iklim</span></li><li><b>Computer Science</b> <span>bilgisayar bilimi</span></li><li><b>continent</b> <span>kıta</span></li><li><b>dictionary</b> <span>sözlük</span></li><li><b>Drama</b> <span>drama</span></li><li><b>education</b> <span>eğitim</span></li><li><b>electricity</b> <span>elektrik</span></li><li><b>element</b> <span>element</span></li><li><b>folder</b> <span>dosya</span></li><li><b>foreign languages</b> <span>yabancı diller</span></li><li><b>Geography</b> <span>coğrafya</span></li><li><b>headphones</b> <span>kulaklık</span></li><li><b>highlighter</b> <span>fosforlu kalem</span></li><li><b>History</b> <span>tarih</span></li><li><b>keys</b> <span>anahtarlar</span></li><li><b>Maths</b> <span>matematik</span></li><li><b>Music</b> <span>müzik</span></li><li><b>notebook</b> <span>defter</span></li><li><b>object</b> <span>nesne</span></li><li><b>Physical Education</b> <span>beden eğitimi</span></li><li><b>Physics</b> <span>fizik</span></li><li><b>plant</b> <span>bitki</span></li><li><b>play an instrument</b> <span>enstrüman çalmak</span></li><li><b>ruler</b> <span>cetvel</span></li><li><b>school bag</b> <span>okul çantası</span></li><li><b>substance</b> <span>madde</span></li><li><b>textbook</b> <span>ders kitabı</span></li><li><b>the past</b> <span>geçmiş</span></li><li><b>tissue</b> <span>mendil</span></li></ul>
+<h4 class="sub">4C Grammar</h4>
+<ul class="wl"><li><b>assistant head teacher</b> <span>müdür yardımcısı</span></li><li><b>character</b> <span>karakter</span></li><li><b>computer code</b> <span>bilgisayar kodu</span></li><li><b>essay</b> <span>kompozisyon</span></li><li><b>have a debate</b> <span>tartışma yapmak</span></li><li><b>improve</b> <span>geliştirmek</span></li><li><b>join</b> <span>katılmak</span></li><li><b>listening/speaking skills</b> <span>dinleme/konuşma becerileri</span></li><li><b>meeting</b> <span>toplantı</span></li><li><b>pen</b> <span>kalem</span></li><li><b>practise doing sth</b> <span>bir şeyi yapma pratiği yapmak</span></li><li><b>role</b> <span>rol</span></li><li><b>take over</b> <span>devralmak</span></li><li><b>takeover</b> <span>devralma</span></li></ul>
+<h4 class="sub">4D Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>adventure</b> <span>macera</span></li><li><b>arrive at (school)</b> <span>(okula) varmak</span></li><li><b>assembly</b> <span>toplu tören</span></li><li><b>design a computer game</b> <span>bilgisayar oyunu tasarlamak</span></li><li><b>do a project</b> <span>proje yapmak</span></li><li><b>do a subject</b> <span>ders almak</span></li><li><b>games designer</b> <span>oyun tasarımcısı</span></li><li><b>gaming</b> <span>oyun oynama</span></li><li><b>get a qualification in sth</b> <span>-de diploma/yeterlilik almak</span></li><li><b>get good grades</b> <span>iyi not almak</span></li><li><b>mix</b> <span>karıştırmak</span></li><li><b>motivated</b> <span>motive, istekli</span></li><li><b>office</b> <span>ofis</span></li><li><b>optional</b> <span>seçmeli</span></li><li><b>pass/fail an exam</b> <span>sınavı geçmek/sınavdan kalmak</span></li><li><b>practical</b> <span>uygulamalı</span></li><li><b>smart</b> <span>akıllı</span></li><li><b>take a break (from sth)</b> <span>mola vermek</span></li><li><b>take an exam</b> <span>sınava girmek</span></li><li><b>test</b> <span>test etmek</span></li><li><b>working day</b> <span>iş günü</span></li></ul>
+<h4 class="sub">4E Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>advert</b> <span>reklam</span></li><li><b>by car/bus/public transport</b> <span>arabayla/otobüsle/toplu taşımayla</span></li><li><b>canal</b> <span>kanal</span></li><li><b>challenge</b> <span>zorluk</span></li><li><b>closed</b> <span>kapalı</span></li><li><b>crowded</b> <span>kalabalık</span></li><li><b>dangerous</b> <span>tehlikeli</span></li><li><b>expensive</b> <span>pahalı</span></li><li><b>free (v)</b> <span>serbest bırakmak</span></li><li><b>freezing</b> <span>dondurucu</span></li><li><b>fun</b> <span>eğlenceli</span></li><li><b>get to school</b> <span>okula varmak</span></li><li><b>journey</b> <span>yolculuk</span></li><li><b>kilometre</b> <span>kilometre</span></li><li><b>ladder</b> <span>el merdiveni</span></li><li><b>on foot</b> <span>yürüyerek</span></li><li><b>plane</b> <span>uçak</span></li><li><b>simple</b> <span>basit</span></li><li><b>skater</b> <span>patenci</span></li><li><b>skating/ice-skating</b> <span>paten/buz pateni</span></li><li><b>take</b> <span>(zaman) almak</span></li><li><b>take a flight</b> <span>uçakla gitmek</span></li><li><b>tiny</b> <span>minicik</span></li><li><b>travel</b> <span>seyahat etmek</span></li><li><b>village</b> <span>köy</span></li><li><b>walk</b> <span>yürümek</span></li></ul>
+<h4 class="sub">4F Speaking</h4>
+<ul class="wl"><li><b>borrow</b> <span>ödünç almak</span></li><li><b>go to the toilet</b> <span>tuvalete gitmek</span></li><li><b>loud</b> <span>gürültülü</span></li></ul>
+<h4 class="sub">4G Writing</h4>
+<ul class="wl"><li><b>chat with friends</b> <span>arkadaşlarla sohbet etmek</span></li><li><b>give a talk</b> <span>konuşma yapmak</span></li><li><b>Internet forum post</b> <span>forum gönderisi</span></li><li><b>secondary school</b> <span>ortaokul/lise</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 5: Appearances</span><span class="src">Word List s. 73</span></summary>
+<h4 class="sub">5A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>accident</b> <span>kaza</span></li><li><b>brave</b> <span>cesur</span></li><li><b>confident</b> <span>kendine güvenen</span></li><li><b>creative</b> <span>yaratıcı</span></li><li><b>cry</b> <span>ağlamak</span></li><li><b>die</b> <span>ölmek</span></li><li><b>easy-going</b> <span>uysal, rahat</span></li><li><b>feel afraid/scared</b> <span>korkmak</span></li><li><b>fire</b> <span>yangın</span></li><li><b>firefighter</b> <span>itfaiyeci</span></li><li><b>funny</b> <span>komik</span></li><li><b>helpful</b> <span>yardımsever</span></li><li><b>hero</b> <span>kahraman</span></li><li><b>inspire</b> <span>ilham vermek</span></li><li><b>move house</b> <span>taşınmak</span></li><li><b>patient</b> <span>sabırlı</span></li><li><b>push</b> <span>itmek</span></li><li><b>reach</b> <span>ulaşmak</span></li><li><b>ride a horse</b> <span>ata binmek</span></li><li><b>save</b> <span>kurtarmak</span></li><li><b>serious</b> <span>ciddi</span></li><li><b>shout at sb</b> <span>birine bağırmak</span></li></ul>
+<h4 class="sub">5B Vocabulary</h4>
+<ul class="wl"><li><b>appearance</b> <span>dış görünüş</span></li><li><b>attractive</b> <span>çekici</span></li><li><b>bald</b> <span>kel</span></li><li><b>beard</b> <span>sakal</span></li><li><b>blue/grey/brown/green eyes</b> <span>mavi/gri/kahverengi/yeşil gözler</span></li><li><b>boots</b> <span>bot</span></li><li><b>build</b> <span>vücut yapısı</span></li><li><b>cardigan</b> <span>hırka</span></li><li><b>coat</b> <span>palto</span></li><li><b>curly/straight/wavy hair</b> <span>kıvırcık/düz/dalgalı saç</span></li><li><b>dark/fair/grey/white/blond(e)/red/brown/black hair</b> <span>koyu/sarı/kır/beyaz/sarışın/kızıl/kahve/siyah saç</span></li><li><b>dress</b> <span>elbise</span></li><li><b>gloves</b> <span>eldiven</span></li><li><b>good-looking</b> <span>yakışıklı, güzel</span></li><li><b>hair colour/type/length</b> <span>saç rengi/tipi/uzunluğu</span></li><li><b>hat</b> <span>şapka</span></li><li><b>height</b> <span>boy</span></li><li><b>hoody</b> <span>kapüşonlu</span></li><li><b>jacket</b> <span>ceket</span></li><li><b>jeans</b> <span>kot</span></li><li><b>jumper</b> <span>kazak</span></li><li><b>middle-aged</b> <span>orta yaşlı</span></li><li><b>nice</b> <span>hoş</span></li><li><b>old</b> <span>yaşlı</span></li><li><b>pretty</b> <span>sevimli, güzel</span></li><li><b>scarf</b> <span>atkı</span></li><li><b>shirt</b> <span>gömlek</span></li><li><b>shoes</b> <span>ayakkabı</span></li><li><b>short/medium-length/long hair</b> <span>kısa/orta/uzun saç</span></li><li><b>skirt</b> <span>etek</span></li><li><b>slim</b> <span>ince</span></li><li><b>smile</b> <span>gülümseme</span></li><li><b>socks</b> <span>çorap</span></li><li><b>tall</b> <span>uzun boylu</span></li><li><b>thin</b> <span>zayıf</span></li><li><b>top</b> <span>üst, bluz</span></li><li><b>tracksuit bottoms</b> <span>eşofman altı</span></li><li><b>trainers</b> <span>spor ayakkabı</span></li><li><b>trousers</b> <span>pantolon</span></li><li><b>T-shirt</b> <span>tişört</span></li><li><b>well-built</b> <span>yapılı</span></li><li><b>young</b> <span>genç</span></li></ul>
+<h4 class="sub">5C Speaking</h4>
+<ul class="wl"><li><b>changing room</b> <span>deneme kabini</span></li><li><b>fit</b> <span>(beden) olmak</span></li><li><b>go shopping for clothes</b> <span>kıyafet alışverişine gitmek</span></li><li><b>sales assistant</b> <span>satış görevlisi</span></li><li><b>size</b> <span>beden</span></li><li><b>small/medium/large</b> <span>küçük/orta/büyük</span></li><li><b>suit</b> <span>yakışmak</span></li><li><b>try on</b> <span>denemek</span></li></ul>
+<h4 class="sub">5D Grammar</h4>
+<ul class="wl"><li><b>dress</b> <span>giyinmek</span></li><li><b>go bald</b> <span>kelleşmek</span></li><li><b>platform shoes</b> <span>platform ayakkabı</span></li><li><b>unfashionable</b> <span>modası geçmiş</span></li><li><b>wear make-up</b> <span>makyaj yapmak</span></li></ul>
+<h4 class="sub">5E Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>campaign</b> <span>kampanya</span></li><li><b>century</b> <span>yüzyıl</span></li><li><b>construction</b> <span>inşaat</span></li><li><b>fit</b> <span>uymak</span></li><li><b>gender</b> <span>cinsiyet</span></li><li><b>go with sth</b> <span>-e uymak</span></li><li><b>good quality</b> <span>kaliteli</span></li><li><b>match</b> <span>uyumlu olmak</span></li><li><b>stereotyping</b> <span>kalıp yargılama</span></li><li><b>suit</b> <span>yakışmak</span></li><li><b>toy</b> <span>oyuncak</span></li><li><b>western world</b> <span>Batı dünyası</span></li></ul>
+<h4 class="sub">5F Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>combine</b> <span>birleştirmek</span></li><li><b>contact</b> <span>iletişime geçmek</span></li><li><b>current photo</b> <span>güncel fotoğraf</span></li><li><b>difference</b> <span>fark</span></li><li><b>different from</b> <span>-den farklı</span></li><li><b>doppelganger</b> <span>tıpatıp benzeri</span></li><li><b>digital</b> <span>dijital</span></li><li><b>double</b> <span>benzeri, eşi</span></li><li><b>facial features</b> <span>yüz hatları</span></li><li><b>feel an instant connection</b> <span>anında bağ hissetmek</span></li><li><b>find a match</b> <span>eşini bulmak</span></li><li><b>genes</b> <span>genler</span></li><li><b>have a lot in common</b> <span>çok ortak noktası olmak</span></li><li><b>have a point</b> <span>haklılık payı olmak</span></li><li><b>identical</b> <span>tıpatıp aynı</span></li><li><b>look like sb</b> <span>birine benzemek</span></li><li><b>look/seem different</b> <span>farklı görünmek</span></li><li><b>lookalike</b> <span>benzer</span></li><li><b>looks</b> <span>görünüş</span></li><li><b>meet face to face</b> <span>yüz yüze görüşmek</span></li><li><b>qualities</b> <span>nitelikler</span></li><li><b>shape</b> <span>şekil</span></li><li><b>shy</b> <span>utangaç</span></li><li><b>similar to sb</b> <span>birine benzer</span></li><li><b>sound</b> <span>…gibi gelmek</span></li><li><b>specific</b> <span>belirli</span></li><li><b>tell jokes</b> <span>fıkra anlatmak</span></li><li><b>the same (as sb/sth)</b> <span>(…ile) aynı</span></li><li><b>twin</b> <span>ikiz</span></li><li><b>virtual</b> <span>sanal</span></li></ul>
+<h4 class="sub">5G Writing</h4>
+<ul class="wl"><li><b>fancy doing sth</b> <span>canı bir şey yapmak istemek</span></li><li><b>primary school</b> <span>ilkokul</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 6: The arts around us</span><span class="src">Word List s. 85</span></summary>
+<h4 class="sub">6A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>3D printing</b> <span>3D baskı</span></li><li><b>actor/actress</b> <span>erkek/kadın oyuncu</span></li><li><b>art gallery</b> <span>sanat galerisi</span></li><li><b>choreographer</b> <span>koreograf</span></li><li><b>composer</b> <span>besteci</span></li><li><b>copy</b> <span>kopya</span></li><li><b>create</b> <span>yaratmak</span></li><li><b>creator</b> <span>yaratıcı</span></li><li><b>dance</b> <span>dans</span></li><li><b>dancer</b> <span>dansçı</span></li><li><b>director</b> <span>yönetmen</span></li><li><b>fast</b> <span>hızlı</span></li><li><b>film</b> <span>film</span></li><li><b>literature</b> <span>edebiyat</span></li><li><b>movie</b> <span>film</span></li><li><b>museum</b> <span>müze</span></li><li><b>music</b> <span>müzik</span></li><li><b>musician</b> <span>müzisyen</span></li><li><b>painter</b> <span>ressam</span></li><li><b>painting</b> <span>resim, tablo</span></li><li><b>photographer</b> <span>fotoğrafçı</span></li><li><b>photography</b> <span>fotoğrafçılık</span></li><li><b>piece of music/literature</b> <span>müzik/edebiyat eseri</span></li><li><b>poet</b> <span>şair</span></li><li><b>rap</b> <span>rap yapmak</span></li><li><b>record</b> <span>kayıt, rekor</span></li><li><b>record-breaking</b> <span>rekor kıran</span></li><li><b>sales</b> <span>satışlar</span></li><li><b>scriptwriter</b> <span>senarist</span></li><li><b>sculptor</b> <span>heykeltıraş</span></li><li><b>sculpture</b> <span>heykel</span></li><li><b>seat</b> <span>koltuk</span></li><li><b>stage</b> <span>sahne</span></li><li><b>talented</b> <span>yetenekli</span></li><li><b>theatre</b> <span>tiyatro</span></li><li><b>trailer</b> <span>fragman</span></li><li><b>version</b> <span>versiyon</span></li><li><b>visitor</b> <span>ziyaretçi</span></li><li><b>world record</b> <span>dünya rekoru</span></li><li><b>writer</b> <span>yazar</span></li></ul>
+<h4 class="sub">6B Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>annual</b> <span>yıllık</span></li><li><b>attract</b> <span>çekmek</span></li><li><b>awesome</b> <span>müthiş</span></li><li><b>awful</b> <span>berbat</span></li><li><b>boring</b> <span>sıkıcı</span></li><li><b>brief</b> <span>kısa</span></li><li><b>brilliant</b> <span>harika</span></li><li><b>clean up</b> <span>temizlemek</span></li><li><b>delicious</b> <span>lezzetli</span></li><li><b>disgusting</b> <span>iğrenç</span></li><li><b>earn</b> <span>kazanmak</span></li><li><b>guide to sth</b> <span>-e rehber</span></li><li><b>headliner</b> <span>baş sanatçı</span></li><li><b>live show</b> <span>canlı gösteri</span></li><li><b>luxurious</b> <span>lüks</span></li><li><b>music/arts festival</b> <span>müzik/sanat festivali</span></li><li><b>performer</b> <span>sanatçı</span></li><li><b>population</b> <span>nüfus</span></li><li><b>sell out</b> <span>(biletler) tükenmek</span></li><li><b>show up</b> <span>gelmek, görünmek</span></li><li><b>star</b> <span>yıldız</span></li><li><b>talented</b> <span>yetenekli</span></li><li><b>tent</b> <span>çadır</span></li><li><b>volunteer</b> <span>gönüllü</span></li><li><b>weather forecast</b> <span>hava tahmini</span></li><li><b>wellies</b> <span>lastik çizme</span></li><li><b>wet</b> <span>ıslak</span></li></ul>
+<h4 class="sub">6C Vocabulary</h4>
+<ul class="wl"><li><b>action film</b> <span>aksiyon filmi</span></li><li><b>animated film</b> <span>animasyon</span></li><li><b>audience</b> <span>seyirci</span></li><li><b>big-/low-budget</b> <span>yüksek/düşük bütçeli</span></li><li><b>cast</b> <span>oyuncu kadrosu</span></li><li><b>character</b> <span>karakter</span></li><li><b>comedy</b> <span>komedi</span></li><li><b>computer-generated images</b> <span>bilgisayar efektleri</span></li><li><b>disappointing</b> <span>hayal kırıklığı yaratan</span></li><li><b>documentary</b> <span>belgesel</span></li><li><b>drama</b> <span>dram</span></li><li><b>ending</b> <span>son</span></li><li><b>exciting</b> <span>heyecan verici</span></li><li><b>fantasy film</b> <span>fantastik film</span></li><li><b>funny</b> <span>komik</span></li><li><b>horror film</b> <span>korku filmi</span></li><li><b>main character</b> <span>ana karakter</span></li><li><b>musical</b> <span>müzikal</span></li><li><b>original</b> <span>özgün</span></li><li><b>plot</b> <span>olay örgüsü</span></li><li><b>predictable</b> <span>tahmin edilebilir</span></li><li><b>romance</b> <span>romantik film</span></li><li><b>scary</b> <span>korkutucu</span></li><li><b>scene</b> <span>sahne</span></li><li><b>science fiction film</b> <span>bilim kurgu filmi</span></li><li><b>soundtrack</b> <span>film müziği</span></li><li><b>special effects</b> <span>özel efektler</span></li><li><b>superhero film</b> <span>süper kahraman filmi</span></li><li><b>unusual</b> <span>sıra dışı</span></li><li><b>western</b> <span>kovboy filmi</span></li></ul>
+<h4 class="sub">6D Grammar</h4>
+<ul class="wl"><li><b>camera</b> <span>kamera</span></li><li><b>direct</b> <span>yönetmek</span></li><li><b>perform</b> <span>sahnelemek</span></li><li><b>school play</b> <span>okul oyunu</span></li><li><b>screen</b> <span>perde, ekran</span></li></ul>
+<h4 class="sub">6E Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>be unsuccessful</b> <span>başarısız olmak</span></li><li><b>get a call</b> <span>telefon almak</span></li><li><b>get a fine</b> <span>ceza yemek</span></li><li><b>get a good grade</b> <span>iyi not almak</span></li><li><b>get bored/angry</b> <span>sıkılmak/kızmak</span></li><li><b>get dark</b> <span>hava kararmak</span></li><li><b>get home/to school</b> <span>eve/okula varmak</span></li><li><b>get worse</b> <span>kötüleşmek</span></li><li><b>graffiti artist</b> <span>grafiti sanatçısı</span></li><li><b>mask</b> <span>maske</span></li><li><b>modern art</b> <span>modern sanat</span></li><li><b>spray paint</b> <span>sprey boya</span></li><li><b>street art</b> <span>sokak sanatı</span></li><li><b>tagging</b> <span>duvara imza atma</span></li></ul>
+<h4 class="sub">6F Speaking</h4>
+<ul class="wl"><li><b>check your diary</b> <span>ajandana bakmak</span></li><li><b>go to an exhibition</b> <span>sergiye gitmek</span></li><li><b>watch a series</b> <span>dizi izlemek</span></li></ul>
+<h4 class="sub">6G Writing</h4>
+<ul class="wl"><li><b>acting</b> <span>oyunculuk</span></li><li><b>be set in …</b> <span>…-de geçmek</span></li><li><b>beginning</b> <span>başlangıç</span></li><li><b>incredible</b> <span>inanılmaz</span></li><li><b>recommend</b> <span>tavsiye etmek</span></li><li><b>win an Oscar</b> <span>Oscar kazanmak</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 7: Going to town</span><span class="src">Word List s. 99</span></summary>
+<h4 class="sub">7A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>at the seaside</b> <span>deniz kenarında</span></li><li><b>book a ticket</b> <span>bilet ayırtmak</span></li><li><b>do (some) sightseeing</b> <span>gezip görmek</span></li><li><b>get a summer job</b> <span>yaz işi bulmak</span></li><li><b>go away</b> <span>tatile gitmek</span></li><li><b>go to an open-air theatre/a lido/a party/the cinema/the beach/the park</b> <span>açık hava tiyatrosuna/açık havuza/partiye/sinemaya/plaja/parka gitmek</span></li><li><b>have a picnic/a barbecue/a party</b> <span>piknik/mangal/parti yapmak</span></li><li><b>have a takeaway</b> <span>paket yemek söylemek</span></li><li><b>have coffee/a meal</b> <span>kahve içmek/yemek yemek</span></li><li><b>have plans</b> <span>planı olmak</span></li><li><b>look out for sb</b> <span>birini kollamak</span></li><li><b>stay with sb</b> <span>birinin yanında kalmak</span></li><li><b>take a trip</b> <span>geziye çıkmak</span></li><li><b>travel around Europe</b> <span>Avrupa&#x27;yı gezmek</span></li><li><b>visit a museum/a city</b> <span>müze/şehir gezmek</span></li><li><b>visit family/friends</b> <span>aileyi/arkadaşları ziyaret etmek</span></li><li><b>watch a match/a show/a band</b> <span>maç/gösteri/grup izlemek</span></li></ul>
+<h4 class="sub">7B Vocabulary</h4>
+<ul class="wl"><li><b>airport</b> <span>havalimanı</span></li><li><b>art gallery</b> <span>sanat galerisi</span></li><li><b>bank</b> <span>banka</span></li><li><b>bridge</b> <span>köprü</span></li><li><b>bus service</b> <span>otobüs seferi</span></li><li><b>canal</b> <span>kanal</span></li><li><b>car park</b> <span>otopark</span></li><li><b>castle</b> <span>kale</span></li><li><b>church</b> <span>kilise</span></li><li><b>cinema</b> <span>sinema</span></li><li><b>concert hall</b> <span>konser salonu</span></li><li><b>drive (your car)</b> <span>araba sürmek</span></li><li><b>driver</b> <span>sürücü</span></li><li><b>get on/off the bus</b> <span>otobüse binmek/inmek</span></li><li><b>go back (to Manchester)</b> <span>geri dönmek</span></li><li><b>go by boat/by plane</b> <span>tekneyle/uçakla gitmek</span></li><li><b>go by train/coach/bus/tram</b> <span>trenle/otobüsle/tramvayla gitmek</span></li><li><b>go on foot</b> <span>yürüyerek gitmek</span></li><li><b>hospital</b> <span>hastane</span></li><li><b>hotel</b> <span>otel</span></li><li><b>library</b> <span>kütüphane</span></li><li><b>market</b> <span>pazar</span></li><li><b>motorway</b> <span>otoyol</span></li><li><b>museum</b> <span>müze</span></li><li><b>on board</b> <span>araçta, gemide</span></li><li><b>park (n)</b> <span>park</span></li><li><b>park (v)</b> <span>park etmek</span></li><li><b>post office</b> <span>postane</span></li><li><b>quay</b> <span>rıhtım</span></li><li><b>restaurant</b> <span>restoran</span></li><li><b>ride a bike/a moped/a motorbike</b> <span>bisiklete/mopede/motosiklete binmek</span></li><li><b>see an exhibition</b> <span>sergi görmek</span></li><li><b>shopping centre</b> <span>AVM</span></li><li><b>sports centre</b> <span>spor merkezi</span></li><li><b>square</b> <span>meydan</span></li><li><b>station</b> <span>istasyon</span></li><li><b>supermarket</b> <span>süpermarket</span></li><li><b>take a taxi/a bus/a tram</b> <span>taksiye/otobüse/tramvaya binmek</span></li><li><b>take a water taxi/a boat</b> <span>deniz taksisine/tekneye binmek</span></li><li><b>theatre</b> <span>tiyatro</span></li><li><b>tourist information centre</b> <span>turist danışma</span></li><li><b>town hall</b> <span>belediye binası</span></li><li><b>train/bus station</b> <span>tren/otobüs istasyonu</span></li><li><b>travelcard</b> <span>ulaşım kartı</span></li><li><b>walk</b> <span>yürümek</span></li></ul>
+<h4 class="sub">7C Listening</h4>
+<ul class="wl"><li><b>attention</b> <span>dikkat</span></li><li><b>belongings</b> <span>eşyalar</span></li><li><b>block</b> <span>engellemek</span></li><li><b>board a train</b> <span>trene binmek</span></li><li><b>exit</b> <span>çıkış</span></li><li><b>gift</b> <span>hediye</span></li><li><b>give sb a warning</b> <span>birini uyarmak</span></li><li><b>interval</b> <span>ara</span></li><li><b>make an announcement</b> <span>anons yapmak</span></li><li><b>member of staff</b> <span>personel</span></li><li><b>passenger</b> <span>yolcu</span></li><li><b>performance</b> <span>gösteri</span></li><li><b>play</b> <span>oyun</span></li><li><b>selection (of books)</b> <span>(kitap) seçkisi</span></li><li><b>station staff</b> <span>istasyon görevlileri</span></li><li><b>ticket office</b> <span>gişe</span></li><li><b>underground station</b> <span>metro istasyonu</span></li><li><b>underground train</b> <span>metro</span></li></ul>
+<h4 class="sub">7D Grammar</h4>
+<ul class="wl"><li><b>aerial tram</b> <span>teleferik</span></li><li><b>art tour</b> <span>sanat turu</span></li><li><b>fly</b> <span>uçmak</span></li><li><b>hotel reception</b> <span>otel resepsiyonu</span></li><li><b>island</b> <span>ada</span></li><li><b>tour guide</b> <span>tur rehberi</span></li><li><b>tourist sight</b> <span>turistik yer</span></li></ul>
+<h4 class="sub">7E Speaking</h4>
+<ul class="wl"><li><b>ask for/give directions</b> <span>yol sormak/tarif etmek</span></li><li><b>road</b> <span>yol</span></li><li><b>tell sb the way</b> <span>birine yolu tarif etmek</span></li></ul>
+<h4 class="sub">7F Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>admire</b> <span>hayran olmak</span></li><li><b>architecture</b> <span>mimari</span></li><li><b>book a place (on a flight)</b> <span>(uçakta) yer ayırtmak</span></li><li><b>buy a ticket</b> <span>bilet almak</span></li><li><b>check the train timetable</b> <span>tren saatlerine bakmak</span></li><li><b>create a profile</b> <span>profil oluşturmak</span></li><li><b>cultural site</b> <span>kültürel mekan</span></li><li><b>find accommodation</b> <span>konaklama bulmak</span></li><li><b>go on your own</b> <span>tek başına gitmek</span></li><li><b>hire a bike</b> <span>bisiklet kiralamak</span></li><li><b>hostel</b> <span>hostel</span></li><li><b>keep costs low</b> <span>masrafı düşük tutmak</span></li><li><b>on Earth</b> <span>dünyada</span></li><li><b>opera house</b> <span>opera binası</span></li><li><b>prison</b> <span>hapishane</span></li><li><b>rich</b> <span>zengin</span></li><li><b>snorkel</b> <span>şnorkelle yüzmek</span></li><li><b>space</b> <span>uzay, alan</span></li><li><b>stay with a host family</b> <span>bir aileyle kalmak</span></li><li><b>take a tour of the city</b> <span>şehir turu yapmak</span></li><li><b>travel cheaply</b> <span>ucuza seyahat etmek</span></li><li><b>work of art</b> <span>sanat eseri</span></li></ul>
+<h4 class="sub">7G Writing</h4>
+<ul class="wl"><li><b>letter</b> <span>mektup</span></li><li><b>on time</b> <span>zamanında</span></li><li><b>parents&#x27; evening</b> <span>veli toplantısı</span></li><li><b>social media message</b> <span>sosyal medya mesajı</span></li><li><b>text message</b> <span>kısa mesaj</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 8: Smart future</span><span class="src">Word List s. 111</span></summary>
+<h4 class="sub">8A Grammar &amp; Vocabulary</h4>
+<ul class="wl"><li><b>3D printer</b> <span>3D yazıcı</span></li><li><b>analyse</b> <span>analiz etmek</span></li><li><b>automatically</b> <span>otomatik olarak</span></li><li><b>charger</b> <span>şarj aleti</span></li><li><b>checkout</b> <span>kasa</span></li><li><b>coin</b> <span>bozuk para</span></li><li><b>deliver</b> <span>teslim etmek</span></li><li><b>drone</b> <span>drone</span></li><li><b>electric car</b> <span>elektrikli araba</span></li><li><b>future</b> <span>gelecek</span></li><li><b>gadget</b> <span>elektronik alet</span></li><li><b>health tracker</b> <span>sağlık takip cihazı</span></li><li><b>make contact with sb</b> <span>biriyle iletişim kurmak</span></li><li><b>Moon</b> <span>Ay</span></li><li><b>note</b> <span>not</span></li><li><b>part of the body/body part</b> <span>vücut parçası</span></li><li><b>petrol car</b> <span>benzinli araba</span></li><li><b>planet</b> <span>gezegen</span></li><li><b>robot</b> <span>robot</span></li><li><b>scientist</b> <span>bilim insanı</span></li><li><b>smartphone</b> <span>akıllı telefon</span></li><li><b>smartwatch</b> <span>akıllı saat</span></li><li><b>tablet computer</b> <span>tablet</span></li><li><b>virtual reality (VR) headset</b> <span>sanal gerçeklik gözlüğü</span></li><li><b>wireless headphones</b> <span>kablosuz kulaklık</span></li></ul>
+<h4 class="sub">8B Vocabulary</h4>
+<ul class="wl"><li><b>attach a cable to your phone</b> <span>telefona kablo takmak</span></li><li><b>attach a file</b> <span>dosya eklemek</span></li><li><b>charge</b> <span>şarj etmek</span></li><li><b>computer equipment</b> <span>bilgisayar donanımı</span></li><li><b>copy some text/a file</b> <span>metin/dosya kopyalamak</span></li><li><b>delete a file/an email</b> <span>dosya/e-posta silmek</span></li><li><b>desktop computer</b> <span>masaüstü bilgisayar</span></li><li><b>download music/an app</b> <span>müzik/uygulama indirmek</span></li><li><b>hard disk</b> <span>sabit disk</span></li><li><b>install an app/a printer</b> <span>uygulama/yazıcı kurmak</span></li><li><b>laptop battery</b> <span>dizüstü bataryası</span></li><li><b>PC</b> <span>bilgisayar</span></li><li><b>print</b> <span>yazdırmak</span></li><li><b>save a document/your changes</b> <span>belgeyi/değişiklikleri kaydetmek</span></li><li><b>scan</b> <span>taramak</span></li><li><b>scanner</b> <span>tarayıcı</span></li><li><b>screen</b> <span>ekran</span></li><li><b>speakers</b> <span>hoparlör</span></li><li><b>switch off</b> <span>kapatmak</span></li><li><b>tech-free</b> <span>teknolojisiz</span></li><li><b>turn up</b> <span>(sesi) açmak</span></li><li><b>type</b> <span>yazmak (klavyeyle)</span></li><li><b>USB cable</b> <span>USB kablosu</span></li><li><b>wireless keyboard/mouse</b> <span>kablosuz klavye/fare</span></li></ul>
+<h4 class="sub">8C Grammar (adverbs of manner)</h4>
+<ul class="wl"><li><b>badly</b> <span>kötü</span></li><li><b>confidently</b> <span>kendinden emin</span></li><li><b>dangerously</b> <span>tehlikeli şekilde</span></li><li><b>do well in an exam</b> <span>sınavda başarılı olmak</span></li><li><b>fast</b> <span>hızlı (adj, adv)</span></li><li><b>happily</b> <span>mutlu şekilde</span></li><li><b>hard</b> <span>sıkı (adj, adv)</span></li><li><b>healthily</b> <span>sağlıklı şekilde</span></li><li><b>key ring</b> <span>anahtarlık</span></li><li><b>lose</b> <span>kaybetmek</span></li><li><b>loudly</b> <span>yüksek sesle</span></li><li><b>perfectly</b> <span>mükemmel şekilde</span></li><li><b>politely</b> <span>kibarca</span></li><li><b>press a button</b> <span>düğmeye basmak</span></li><li><b>safely</b> <span>güvenle</span></li><li><b>slowly</b> <span>yavaşça</span></li><li><b>start up</b> <span>başlatmak</span></li><li><b>tracker</b> <span>takip cihazı</span></li><li><b>urgently</b> <span>acilen</span></li><li><b>well</b> <span>iyi (adv)</span></li></ul>
+<h4 class="sub">8D Listening &amp; Vocabulary</h4>
+<ul class="wl"><li><b>broken</b> <span>bozuk</span></li><li><b>develop</b> <span>geliştirmek</span></li><li><b>discover</b> <span>keşfetmek</span></li><li><b>excited</b> <span>heyecanlı</span></li><li><b>experiment with sth</b> <span>bir şeyle deney yapmak</span></li><li><b>frightened</b> <span>korkmuş</span></li><li><b>invent</b> <span>icat etmek</span></li><li><b>produce</b> <span>üretmek</span></li><li><b>surprised</b> <span>şaşırmış</span></li><li><b>test</b> <span>test etmek</span></li><li><b>time machine</b> <span>zaman makinesi</span></li><li><b>time travel</b> <span>zaman yolculuğu</span></li><li><b>travel in time</b> <span>zamanda yolculuk etmek</span></li></ul>
+<h4 class="sub">8E Speaking</h4>
+<ul class="wl"><li><b>alive</b> <span>canlı, hayatta</span></li><li><b>imagine</b> <span>hayal etmek</span></li><li><b>Internet access</b> <span>internet erişimi</span></li><li><b>make life easier</b> <span>hayatı kolaylaştırmak</span></li><li><b>personal robot</b> <span>kişisel robot</span></li><li><b>start an app</b> <span>uygulama başlatmak</span></li><li><b>turn the lights on/off</b> <span>ışıkları açmak/kapatmak</span></li><li><b>voice assistant/voice-controlled assistant</b> <span>sesli asistan</span></li></ul>
+<h4 class="sub">8F Reading &amp; Vocabulary</h4>
+<ul class="wl"><li><b>amazed</b> <span>hayran kalmış</span></li><li><b>angry</b> <span>kızgın</span></li><li><b>bored</b> <span>sıkılmış</span></li><li><b>breathing</b> <span>nefes alma</span></li><li><b>communicate face-to-face/in person</b> <span>yüz yüze iletişim kurmak</span></li><li><b>communicate online</b> <span>çevrimiçi iletişim kurmak</span></li><li><b>computer scientist</b> <span>bilgisayar bilimcisi</span></li><li><b>excited</b> <span>heyecanlı</span></li><li><b>happy</b> <span>mutlu</span></li><li><b>heart</b> <span>kalp</span></li><li><b>human brain</b> <span>insan beyni</span></li><li><b>in a good/bad mood</b> <span>keyfi yerinde/kaçık</span></li><li><b>interaction (with other people)</b> <span>(insanlarla) etkileşim</span></li><li><b>recognise</b> <span>tanımak</span></li><li><b>researcher</b> <span>araştırmacı</span></li><li><b>sad</b> <span>üzgün</span></li><li><b>scared</b> <span>korkmuş</span></li><li><b>software</b> <span>yazılım</span></li><li><b>solve problems</b> <span>problem çözmek</span></li><li><b>stressed</b> <span>stresli</span></li><li><b>surprised</b> <span>şaşırmış</span></li><li><b>understand/recognise/read/identify/show emotions</b> <span>duyguları anlamak/tanımak/okumak/ayırt etmek/göstermek</span></li><li><b>worried</b> <span>endişeli</span></li></ul>
+<h4 class="sub">8G Writing</h4>
+<ul class="wl"><li><b>fitness tracker</b> <span>fitness saati</span></li><li><b>in perfect condition</b> <span>kusursuz durumda</span></li><li><b>notice</b> <span>duyuru, ilan</span></li><li><b>possession</b> <span>sahip olunan eşya</span></li><li><b>reward</b> <span>ödül</span></li><li><b>swap</b> <span>takas etmek</span></li></ul>
+</details>
+</div>
+  <div class="part-head sub-head" id="v-sk"><span class="eyebrow">V2</span><h2>Skillful Listening &amp; Speaking 1</h2><span class="src">Duyuru: "Skillful Listening &amp; Speaking 1: Units stated in the syllabus (Weeks 1–8)" · Unit 1 hafta 4, Unit 2 hafta 6, Unit 3 hafta 7, Unit 4 hafta 8</span></div>
+  <div class="topic" id="skillful">
+<div class="group-title"><h3>Skillful L&amp;S 1 · Units 1–4 tam Wordlist</h3><span class="src">Kitabın her ünite sonundaki Review sayfasından (s. 25, 45, 63, 83)</span></div>
+<p>Syllabus'ta atlanan sayfalardaki kelimeler <span class="skip-tag">atlandı</span> etiketli. Unit 4'te Vocabulary development ve Academic words s. 75–81 arasında, syllabus bu sayfaları atlıyor. Yine de anlamlarını bil.</p>
+<details class="unit" open><summary><span class="u-title">Unit 1: Character</span><span class="src">Wordlist s. 25 · syllabus hafta 4 (s. 8–25)</span></summary>
+<h4 class="sub">Vocabulary preview</h4>
+<ul class="wl"><li><b>attention</b> <span>dikkat</span></li><li><b>birth order</b> <span>doğum sırası</span></li><li><b>character</b> <span>karakter</span></li><li><b>comfortable</b> <span>rahat</span></li><li><b>describe</b> <span>tarif etmek</span></li><li><b>easy-going</b> <span>uysal, rahat</span></li><li><b>effect</b> <span>etki</span></li><li><b>funny</b> <span>komik</span></li><li><b>organized</b> <span>düzenli</span></li><li><b>research</b> <span>araştırma</span></li><li><b>serious</b> <span>ciddi</span></li><li><b>social</b> <span>sosyal</span></li><li><b>strict</b> <span>katı, sıkı</span></li><li><b>subject</b> <span>konu, ders</span></li><li><b>talkative</b> <span>konuşkan</span></li><li><b>usually</b> <span>genellikle</span></li></ul>
+<h4 class="sub">Vocabulary development</h4>
+<ul class="wl"><li><b>confident</b> <span>kendine güvenen</span></li><li><b>creative</b> <span>yaratıcı</span></li><li><b>generous</b> <span>cömert</span></li><li><b>intelligent</b> <span>zeki</span></li><li><b>lazy</b> <span>tembel</span></li><li><b>polite</b> <span>kibar</span></li><li><b>selfish</b> <span>bencil</span></li><li><b>shy</b> <span>utangaç</span></li></ul>
+<h4 class="sub">Academic words and idioms</h4>
+<ul class="wl"><li><b>believe</b> <span>inanmak</span></li><li><b>big picture</b> <span>genel tablo</span></li><li><b>goals</b> <span>hedefler</span></li><li><b>grades</b> <span>notlar</span></li><li><b>happily ever after</b> <span>sonsuza dek mutlu</span></li><li><b>instructions</b> <span>talimatlar</span></li><li><b>job</b> <span>iş</span></li><li><b>negative</b> <span>olumsuz</span></li><li><b>positive</b> <span>olumlu</span></li><li><b>similar</b> <span>benzer</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 2: Time</span><span class="src">Wordlist s. 45 · syllabus hafta 6 (s. 28–33, 39–45; s. 34–38 Listening 2 opsiyonel)</span></summary>
+<h4 class="sub">Vocabulary preview</h4>
+<ul class="wl"><li><b>active</b> <span>aktif</span></li><li><b>awake</b> <span>uyanık</span></li><li><b>brain</b> <span>beyin</span></li><li><b>choices</b> <span>seçimler</span></li><li><b>cycle</b> <span>döngü</span></li><li><b>daily</b> <span>günlük</span></li><li><b>expect</b> <span>beklemek</span></li><li><b>find out</b> <span>öğrenmek</span></li><li><b>healthy</b> <span>sağlıklı</span></li><li><b>interrupt</b> <span>sözünü kesmek</span></li><li><b>natural</b> <span>doğal</span></li><li><b>pattern</b> <span>düzen, örüntü</span></li><li><b>period</b> <span>dönem, süre</span></li><li><b>regular</b> <span>düzenli</span></li><li><b>total</b> <span>toplam</span></li><li><b>typical</b> <span>tipik</span></li></ul>
+<h4 class="sub">Vocabulary development</h4>
+<ul class="wl"><li><b>early</b> <span>erken</span></li><li><b>fall asleep</b> <span>uykuya dalmak</span></li><li><b>get up</b> <span>kalkmak</span></li><li><b>go to bed</b> <span>yatmak</span></li><li><b>late</b> <span>geç</span></li><li><b>stay up</b> <span>geç yatmak</span></li><li><b>tired</b> <span>yorgun</span></li><li><b>wake up</b> <span>uyanmak</span></li></ul>
+<h4 class="sub">Academic words and idioms</h4>
+<ul class="wl"><li><b>bad news</b> <span>kötü haber</span></li><li><b>biology</b> <span>biyoloji</span></li><li><b>culture</b> <span>kültür</span></li><li><b>energy</b> <span>enerji</span></li><li><b>environment</b> <span>ortam, çevre</span></li><li><b>expert</b> <span>uzman</span></li><li><b>label</b> <span>etiket</span></li><li><b>volunteer</b> <span>gönüllü</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 3: Cities</span><span class="src">Wordlist s. 63 · syllabus hafta 7 (s. 46–51, 57–63; s. 52–56 Listening 2 opsiyonel)</span></summary>
+<h4 class="sub">Vocabulary preview</h4>
+<ul class="wl"><li><b>crowded</b> <span>kalabalık</span></li><li><b>differences</b> <span>farklar</span></li><li><b>grow</b> <span>büyümek</span></li><li><b>huge</b> <span>devasa</span></li><li><b>level</b> <span>kat, seviye</span></li><li><b>mixed</b> <span>karışık</span></li><li><b>outdoor</b> <span>açık hava</span></li><li><b>pollution</b> <span>kirlilik</span></li><li><b>product</b> <span>ürün</span></li><li><b>public</b> <span>kamu, halka açık</span></li><li><b>space</b> <span>alan</span></li><li><b>system</b> <span>sistem</span></li><li><b>top</b> <span>en üst</span></li><li><b>trend</b> <span>eğilim</span></li></ul>
+<h4 class="sub">Vocabulary development</h4>
+<ul class="wl"><li><b>business</b> <span>iş yeri, ticaret</span></li><li><b>downtown</b> <span>şehir merkezi</span></li><li><b>historic</b> <span>tarihi</span></li><li><b>increase</b> <span>artmak</span></li><li><b>neighborhood</b> <span>mahalle</span></li><li><b>parking</b> <span>otopark, park etme</span></li><li><b>popular</b> <span>popüler</span></li><li><b>tourists</b> <span>turistler</span></li></ul>
+<h4 class="sub">Academic words and idioms</h4>
+<ul class="wl"><li><b>area</b> <span>bölge</span></li><li><b>channel</b> <span>kanal</span></li><li><b>design</b> <span>tasarım</span></li><li><b>document</b> <span>belge</span></li><li><b>enormous</b> <span>devasa</span></li><li><b>equipment</b> <span>ekipman</span></li><li><b>hang on a minute</b> <span>bir dakika bekle</span></li><li><b>in the early days</b> <span>ilk zamanlarda</span></li><li><b>obvious</b> <span>apaçık</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">Unit 4: Culture</span><span class="src">Wordlist s. 83 · syllabus hafta 8 (s. 66–83; s. 66–67 video ve s. 75–81 atlandı)</span></summary>
+<h4 class="sub">Vocabulary preview</h4>
+<ul class="wl"><li><b>celebrate</b> <span>kutlamak</span></li><li><b>customs</b> <span>gelenekler</span></li><li><b>develop</b> <span>gelişmek</span></li><li><b>generation</b> <span>nesil</span></li><li><b>greeting</b> <span>selamlama</span></li><li><b>habits</b> <span>alışkanlıklar</span></li><li><b>host</b> <span>ev sahibi</span></li><li><b>luck</b> <span>şans</span></li><li><b>nervous</b> <span>gergin</span></li><li><b>particular</b> <span>belirli</span></li><li><b>purpose</b> <span>amaç</span></li><li><b>respect</b> <span>saygı</span></li><li><b>season</b> <span>mevsim</span></li><li><b>society</b> <span>toplum</span></li><li><b>title</b> <span>unvan</span></li><li><b>upset</b> <span>üzmek</span></li></ul>
+<h4 class="sub">Vocabulary development <span class="skip-tag">atlandı</span></h4>
+<ul class="wl"><li><b>acceptable</b> <span>kabul edilebilir</span></li><li><b>celebration</b> <span>kutlama</span></li><li><b>common</b> <span>yaygın, ortak</span></li><li><b>guest</b> <span>misafir</span></li><li><b>invitation</b> <span>davet</span></li><li><b>polite</b> <span>kibar</span></li><li><b>receive</b> <span>almak</span></li><li><b>wedding</b> <span>düğün</span></li></ul>
+<h4 class="sub">Academic words and idioms <span class="skip-tag">atlandı</span></h4>
+<ul class="wl"><li><b>adults</b> <span>yetişkinler</span></li><li><b>attitude</b> <span>tutum</span></li><li><b>classical</b> <span>klasik</span></li><li><b>contact</b> <span>iletişime geçmek</span></li><li><b>costume</b> <span>kostüm</span></li><li><b>expert</b> <span>uzman</span></li><li><b>keep an eye on</b> <span>göz kulak olmak</span></li><li><b>license</b> <span>ehliyet, lisans</span></li><li><b>the golden rule</b> <span>altın kural</span></li></ul>
+</details>
+</div>
+  <p class="instr-line">B hocasının öncelik listesi (örnek cümleli), hafta 6–8:</p>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 6 · Skillful 1, Unit 2: Time</h3><span class="src">s. 28–33, 39–45</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">expect</td><td class="t">v</td><td>beklemek, ummak</td><td class="ex">My boss expects us to be on time.</td></tr>
+      <tr><td class="w">find out</td><td class="t">phr v</td><td>öğrenmek, bulmak</td><td class="ex">I read the news to find out what's happening.</td></tr>
+      <tr><td class="w">regular</td><td class="t">adj</td><td>düzenli</td><td class="ex">A regular sleep schedule is important.</td></tr>
+      <tr><td class="w">daily</td><td class="t">adj</td><td>günlük</td><td class="ex">Stretching is part of my daily routine.</td></tr>
+      <tr><td class="w">awake</td><td class="t">adj</td><td>uyanık</td><td class="ex">It's hard to stay awake after lunch.</td></tr>
+      <tr><td class="w">active</td><td class="t">adj</td><td>hareketli, aktif</td><td class="ex">Cats are active at night.</td></tr>
+      <tr><td class="w">energy</td><td class="t">n</td><td>enerji</td><td class="ex">I have a lot of energy in the morning.</td></tr>
+      <tr><td class="w">expert</td><td class="t">n</td><td>uzman</td><td class="ex">She is an expert on sleep.</td></tr>
+      <tr><td class="w">environment</td><td class="t">n</td><td>ortam, çevre</td><td class="ex">A quiet, dark environment helps you sleep.</td></tr>
+      <tr><td class="w">label</td><td class="t">n</td><td>etiket</td><td class="ex">Read the label on the bottle.</td></tr>
+      <tr><td class="w">bad news</td><td class="t">idiom</td><td>kötü haber; sorun çıkaran kişi/şey</td><td class="ex">The bad news is that coffee keeps you awake.</td></tr>
+    </table></div>
+  </div>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 7 · Skillful 1, Unit 3: Cities</h3><span class="src">s. 46–51, 57–63</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">trend</td><td class="t">n</td><td>eğilim</td><td class="ex">More people working from home is a trend.</td></tr>
+      <tr><td class="w">crowded</td><td class="t">adj</td><td>kalabalık</td><td class="ex">The café was crowded.</td></tr>
+      <tr><td class="w">huge</td><td class="t">adj</td><td>devasa</td><td class="ex">Rio is a huge city.</td></tr>
+      <tr><td class="w">grow</td><td class="t">v</td><td>büyümek, artmak; yetiştirmek</td><td class="ex">The population is growing.</td></tr>
+      <tr><td class="w">public</td><td class="t">adj</td><td>halka açık, kamu</td><td class="ex">the public library</td></tr>
+      <tr><td class="w">obvious</td><td class="t">adj</td><td>apaçık</td><td class="ex">The answer was obvious.</td></tr>
+      <tr><td class="w">equipment</td><td class="t">n (unc.)</td><td>ekipman (çoğul olmaz!)</td><td class="ex">Firefighters need special equipment.</td></tr>
+      <tr><td class="w">in the early days</td><td class="t">idiom</td><td>ilk zamanlarda</td><td class="ex">Electric cars are still in the early days.</td></tr>
+    </table></div>
+  </div>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 8 · Skillful 1, Unit 4: Culture + Basketball</h3><span class="src">s. 66–74, 82–83 · Booklet s. 165–167</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">nervous</td><td class="t">adj</td><td>gergin, tedirgin</td><td class="ex">I feel nervous before tests.</td></tr>
+      <tr><td class="w">respect</td><td class="t">n</td><td>saygı</td><td class="ex">People bow to show respect.</td></tr>
+      <tr><td class="w">host</td><td class="t">n</td><td>ev sahibi</td><td class="ex">Guests give chocolates to the host.</td></tr>
+      <tr><td class="w">upset</td><td class="t">v</td><td>üzmek (upset–upset–upset)</td><td class="ex">I don't want to upset my parents.</td></tr>
+      <tr><td class="w">luck</td><td class="t">n</td><td>şans</td><td class="ex">13 brings bad luck.</td></tr>
+      <tr><td class="w">celebrate</td><td class="t">v</td><td>kutlamak</td><td class="ex">We celebrate New Year with dinner.</td></tr>
+      <tr><td class="w">develop</td><td class="t">v</td><td>gelişmek, geliştirmek</td><td class="ex">Cultures develop over time.</td></tr>
+      <tr><td class="w">generation</td><td class="t">n</td><td>nesil</td><td class="ex">Gen Z is a generation.</td></tr>
+      <tr><td class="w">habit</td><td class="t">n</td><td>alışkanlık</td><td class="ex">Drinking tea is a habit.</td></tr>
+      <tr><td class="w">particular</td><td class="t">adj</td><td>belirli, özel</td><td class="ex">Is there a particular custom?</td></tr>
+      <tr><td class="w">purpose</td><td class="t">n</td><td>amaç</td><td class="ex">The purpose of my talk is…</td></tr>
+      <tr><td class="w">invent</td><td class="t">v</td><td>icat etmek</td><td class="ex">Naismith invented basketball in 1891.</td></tr>
+      <tr><td class="w">establish</td><td class="t">v</td><td>kurmak</td><td class="ex">They established the NBA in 1949.</td></tr>
+      <tr><td class="w">indoors</td><td class="t">adv</td><td>içeride, kapalı alanda</td><td class="ex">Let's stay indoors.</td></tr>
+      <tr><td class="w">wide</td><td class="t">adj</td><td>geniş</td><td class="ex">wide enough for two cars</td></tr>
+    </table></div>
+  </div>
+  <div class="part-head sub-head" id="v-mc"><span class="eyebrow">V3</span><h2>Making Connections 2</h2><span class="src">Duyuru: "Making Connections 2: Units stated in the syllabus (Weeks 1–8)" · Unit 1, Reading 1 (s. 2–12) ve Reading 2 (s. 13–20)</span></div>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 8 · Making Connections 2, Unit 1: The News Media</h3><span class="src">Reading 1–2 · Skill Practice, Skill Review</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">afford</td><td class="t">v</td><td>(parası) yetmek</td><td class="ex">Many people could not afford newspapers.</td></tr>
+      <tr><td class="w">eager</td><td class="t">adj</td><td>hevesli, can atan</td><td class="ex">eager to open their presents</td></tr>
+      <tr><td class="w">gather</td><td class="t">v</td><td>toplanmak</td><td class="ex">Reporters gathered outside.</td></tr>
+      <tr><td class="w">publish</td><td class="t">v</td><td>yayımlamak</td><td class="ex">She published her first book last year.</td></tr>
+      <tr><td class="w">terrified</td><td class="t">adj</td><td>dehşete düşmüş</td><td class="ex">The audience was terrified.</td></tr>
+      <tr><td class="w">average</td><td class="t">adj</td><td>ortalama, tipik</td><td class="ex">The average student sleeps 7 hours.</td></tr>
+      <tr><td class="w">crime</td><td class="t">n</td><td>suç</td><td class="ex">The number of crimes is rising.</td></tr>
+      <tr><td class="w">illiterate</td><td class="t">adj</td><td>okuma yazma bilmeyen</td><td class="ex">Many people were illiterate.</td></tr>
+      <tr><td class="w">sedentary</td><td class="t">adj</td><td>hareketsiz, oturarak</td><td class="ex">a sedentary office job</td></tr>
+      <tr><td class="w">agitated</td><td class="t">adj</td><td>çok gergin, huzursuz</td><td class="ex">He began to feel agitated.</td></tr>
+      <tr><td class="w">alternative</td><td class="t">adj</td><td>alternatif</td><td class="ex">alternative sources of energy</td></tr>
+      <tr><td class="w">informative</td><td class="t">adj</td><td>bilgilendirici</td><td class="ex">The documentary was very informative.</td></tr>
+      <tr><td class="w">horrifying</td><td class="t">adj</td><td>dehşet verici</td><td class="ex">pictures too horrifying to print</td></tr>
+      <tr><td class="w">resist</td><td class="t">v</td><td>karşı koymak, dayanmak</td><td class="ex">She could not resist the chocolates.</td></tr>
+      <tr><td class="w">brief</td><td class="t">adj</td><td>kısa</td><td class="ex">brief one-page reports</td></tr>
+      <tr><td class="w">prior to</td><td class="t">prep</td><td>-den önce</td><td class="ex">Prior to TV, news traveled by word of mouth.</td></tr>
+    </table></div>
+  </div>
+  <div class="topic">
+    <div class="group-title"><h3>Making Connections 2, Unit 1: diğer kelimeler</h3><span class="src">Kitabın Appendix 1 "Key Vocabulary" listesi (s. 257–258) ve Skill Practice sayfaları ile kontrol edildi</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Metindeki bağlam</th></tr>
+      <tr><td class="w">accelerate</td><td class="t">v</td><td>hızlanmak</td><td class="ex">the pace of change is accelerating (R2)</td></tr>
+      <tr><td class="w">access / accessible</td><td class="t">n / adj</td><td>erişim / erişilebilir</td><td class="ex">accessible to more listeners (R2)</td></tr>
+      <tr><td class="w">available</td><td class="t">adj</td><td>mevcut, ulaşılabilir</td><td class="ex">available from other systems (R2)</td></tr>
+      <tr><td class="w">bulky</td><td class="t">adj</td><td>hantal, büyük ve ağır</td><td class="ex">the first radios were bulky (R2)</td></tr>
+      <tr><td class="w">convenient</td><td class="t">adj</td><td>kullanışlı, elverişli</td><td class="ex">made the radio more convenient (R2)</td></tr>
+      <tr><td class="w">devastation</td><td class="t">n</td><td>yıkım</td><td class="ex">devastation caused by the earthquake</td></tr>
+      <tr><td class="w">eliminate</td><td class="t">v</td><td>elemek, ortadan kaldırmak</td><td class="ex">eliminate wrong answers</td></tr>
+      <tr><td class="w">far-reaching</td><td class="t">adj</td><td>geniş kapsamlı</td><td class="ex">far-reaching changes in society (R2)</td></tr>
+      <tr><td class="w">global</td><td class="t">adj</td><td>küresel</td><td class="ex">global news 24 hours a day (R2)</td></tr>
+      <tr><td class="w">impact</td><td class="t">n</td><td>etki</td><td class="ex">a huge impact on the news (R2)</td></tr>
+      <tr><td class="w">influence / influential</td><td class="t">n / adj</td><td>etki / etkili</td><td class="ex">influence on ideas and opinions (R2)</td></tr>
+      <tr><td class="w">invention</td><td class="t">n</td><td>icat</td><td class="ex">the invention of the printing press (R1)</td></tr>
+      <tr><td class="w">negative</td><td class="t">adj</td><td>olumsuz</td><td class="ex">negative news on TV (R2)</td></tr>
+      <tr><td class="w">pace</td><td class="t">n</td><td>hız, tempo</td><td class="ex">the pace of change (R2)</td></tr>
+      <tr><td class="w">revolution</td><td class="t">n</td><td>devrim</td><td class="ex">the 2011 revolutions (R2)</td></tr>
+      <tr><td class="w">significant</td><td class="t">adj</td><td>önemli</td><td class="ex">a significant influence (R2)</td></tr>
+      <tr><td class="w">sole</td><td class="t">adj</td><td>tek, yegane</td><td class="ex">not the sole way to get news (R2)</td></tr>
+      <tr><td class="w">traditional</td><td class="t">adj</td><td>geleneksel</td><td class="ex">traditional newspapers (R2)</td></tr>
+      <tr><td class="w">transmit</td><td class="t">v</td><td>iletmek, yayınlamak</td><td class="ex">transmit the news through the air (R2)</td></tr>
+      <tr><td class="w">views</td><td class="t">n</td><td>görüşler</td><td class="ex">people's views, or opinions (R2)</td></tr>
+      <tr><td class="w">natural disaster</td><td class="t">n</td><td>doğal afet</td><td class="ex">earthquakes, eruptions, floods (R1)</td></tr>
+      <tr><td class="w">dramatically</td><td class="t">adv</td><td>çarpıcı biçimde</td><td class="ex">The Internet has dramatically changed the news. (R1)</td></tr>
+      <tr><td class="w">focus on</td><td class="t">v</td><td>odaklanmak</td><td class="ex">This program focuses on business news. (R1)</td></tr>
+      <tr><td class="w">acceleration</td><td class="t">n</td><td>hızlanma</td><td class="ex">This car has good acceleration. (R2)</td></tr>
+      <tr><td class="w">access (to)</td><td class="t">n / v</td><td>erişim / erişmek</td><td class="ex">access to computers; access the Internet (R2)</td></tr>
+      <tr><td class="w">availability</td><td class="t">n</td><td>bulunabilirlik</td><td class="ex">check the availability of tickets (R2)</td></tr>
+      <tr><td class="w">battery</td><td class="t">n</td><td>pil, batarya</td><td class="ex">recharge the battery (R2)</td></tr>
+      <tr><td class="w">broadcasting</td><td class="t">n</td><td>yayın(cılık)</td><td class="ex">began broadcasting the results (R2)</td></tr>
+      <tr><td class="w">live</td><td class="t">adj</td><td>canlı (yayın)</td><td class="ex">The match was seen live around the world. (R2)</td></tr>
+      <tr><td class="w">significance</td><td class="t">n</td><td>önem</td><td class="ex">the significance of live broadcasts (R2)</td></tr>
+      <tr><td class="w">tradition</td><td class="t">n</td><td>gelenek</td><td class="ex">traditions in different communities (R2)</td></tr>
+      <tr><td class="w">consumer</td><td class="t">n</td><td>tüketici</td><td class="ex">more consumers began to buy them (Skill Practice 3)</td></tr>
+      <tr><td class="w">positive</td><td class="t">adj</td><td>olumlu</td><td class="ex">many positive things about the project (Skill Practice 3)</td></tr>
+      <tr><td class="w">decline</td><td class="t">v</td><td>azalmak</td><td class="ex">the number of immigrants declined (Skill Practice 3)</td></tr>
+      <tr><td class="w">spanned / functioning</td><td class="t">v</td><td>boydan boya uzandı / düzgün çalışan</td><td class="ex">Skill Review, s. 10</td></tr>
+    </table></div>
+  </div>
+  <div class="part-head sub-head" id="v-bk"><span class="eyebrow">V4</span><h2>CC Booklet okuma ve dinleme kelimeleri</h2><span class="src">Duyuru: "Vocabulary sections (pre- and post-reading/listening activities) of the Reading and Listening materials provided by the C.C." (hafta 1–8)</span></div>
+  <div class="topic" id="booklet">
+<div class="group-title"><h3>CC Booklet okuma ve dinleme kelimeleri (hafta 1–8)</h3><span class="src">Booklet 1 ve 2'deki pre/post-reading ve pre/post-listening kelime alıştırmalarından</span></div>
+<p>Quiz duyurusunda açıkça yazıyor: "Vocabulary sections (pre- and post-reading/listening activities) of the Reading and Listening materials". Seza Hoca'nın çalışma kağıdı da Sandberg ve Hagia Sophia'nın <b>kelime türetme</b> tablolarından soruyor. Bu tabloları mutlaka çalış.</p>
+<details class="unit" open><summary><span class="u-title">P1A okumaları (A hocası)</span><span class="src">Booklet 1, s. 121–140</span></summary>
+<h4 class="sub">Sheryl Sandberg · kelimeler</h4>
+<ul class="wl"><li><b>advisor</b> <span>danışman</span></li><li><b>brilliant</b> <span>çok zeki, parlak</span></li><li><b>board</b> <span>yönetim kurulu</span></li><li><b>dedicated</b> <span>kendini adamış</span></li><li><b>encourage</b> <span>cesaretlendirmek</span></li><li><b>give up</b> <span>vazgeçmek</span></li><li><b>influential</b> <span>etkili, nüfuzlu</span></li><li><b>inspire</b> <span>ilham vermek</span></li><li><b>profitable</b> <span>kârlı</span></li><li><b>resilience</b> <span>yılmazlık, dayanıklılık</span></li></ul>
+<h4 class="sub">Sheryl Sandberg · kelime türetme (Seza Hoca&#x27;nın çalışma kağıdında da var)</h4>
+<ul class="wl"><li><b>lead → leadership → leader → leading</b> <span>liderlik etmek / liderlik / lider / önde gelen</span></li><li><b>advise → advice → advisor</b> <span>tavsiye etmek / tavsiye (sayılamaz) / danışman</span></li><li><b>inspire → inspiration → inspiring / inspirational</b> <span>ilham vermek / ilham / ilham verici</span></li><li><b>organize → organization → organizer → organizational</b> <span>düzenlemek / kuruluş, düzen / düzenleyici / organizasyonel</span></li><li><b>succeed → success → successful</b> <span>başarmak / başarı / başarılı</span></li><li><b>profit (v) → profit (n) → profitable</b> <span>kâr etmek / kâr / kârlı</span></li><li><b>influence (v) → influence (n) → influential</b> <span>etkilemek / etki / etkili</span></li><li><b>encourage → encouragement → encouraging</b> <span>cesaretlendirmek / teşvik / cesaret verici</span></li><li><b>die → death → dead</b> <span>ölmek / ölüm / ölü</span></li><li><b>dedicate → dedication → dedicated</b> <span>adamak / bağlılık / kendini adamış</span></li></ul>
+<h4 class="sub">Boğaziçi University · kelimeler</h4>
+<ul class="wl"><li><b>medium of instruction</b> <span>eğitim dili</span></li><li><b>consist of</b> <span>-den oluşmak</span></li><li><b>elective</b> <span>seçmeli ders</span></li><li><b>last</b> <span>sürmek</span></li><li><b>available</b> <span>mevcut, ulaşılabilir</span></li><li><b>gain insight into</b> <span>-i daha iyi kavramak</span></li><li><b>via</b> <span>aracılığıyla</span></li><li><b>compulsory</b> <span>zorunlu</span></li><li><b>found</b> <span>kurmak (founded)</span></li><li><b>rank</b> <span>sıralamada yer almak</span></li></ul>
+<h4 class="sub">Hagia Sophia · kelimeler</h4>
+<ul class="wl"><li><b>column</b> <span>sütun</span></li><li><b>earthquake</b> <span>deprem</span></li><li><b>marble</b> <span>mermer</span></li><li><b>minaret</b> <span>minare</span></li><li><b>dome</b> <span>kubbe</span></li><li><b>Historic Peninsula</b> <span>Tarihi Yarımada</span></li><li><b>masterpiece</b> <span>başyapıt</span></li><li><b>treasure</b> <span>hazine</span></li><li><b>strengthen</b> <span>güçlendirmek</span></li><li><b>serve (as)</b> <span>(…olarak) hizmet etmek</span></li><li><b>disaster</b> <span>felaket</span></li><li><b>regard (as)</b> <span>(…olarak) görmek</span></li><li><b>construction</b> <span>inşaat, yapım</span></li><li><b>rob</b> <span>soymak</span></li></ul>
+<h4 class="sub">Hagia Sophia · kelime türetme</h4>
+<ul class="wl"><li><b>build → building → builder</b> <span>inşa etmek / bina / inşaatçı</span></li><li><b>decorate → decoration → decorator → decorative</b> <span>süslemek / süsleme / dekoratör / dekoratif</span></li><li><b>survive → survival → survivor</b> <span>hayatta kalmak / hayatta kalma / kurtulan</span></li><li><b>strengthen → strength → strong</b> <span>güçlendirmek / güç / güçlü</span></li><li><b>rob → robbery → robber</b> <span>soymak / soygun / soyguncu</span></li><li><b>fame → famous</b> <span>ün / ünlü</span></li><li><b>originate → origin → original</b> <span>kökeni olmak / köken / orijinal</span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">P1B okumaları (B hocası)</span><span class="src">Booklet 1, s. 223–300</span></summary>
+<h4 class="sub">Life at Three Universities</h4>
+<ul class="wl"><li><b>art room</b> <span>resim odası</span></li><li><b>dormitory</b> <span>yurt</span></li><li><b>lecture hall</b> <span>amfi</span></li><li><b>science room</b> <span>fen sınıfı</span></li><li><b>basketball court</b> <span>basketbol sahası</span></li><li><b>gym</b> <span>spor salonu</span></li><li><b>library</b> <span>kütüphane</span></li><li><b>student center</b> <span>öğrenci merkezi</span></li><li><b>computer lab</b> <span>bilgisayar laboratuvarı</span></li><li><b>indoor/outdoor swimming pool</b> <span>kapalı/açık havuz</span></li><li><b>study room</b> <span>çalışma odası</span></li><li><b>attend</b> <span>katılmak (derse)</span></li><li><b>assignment</b> <span>ödev</span></li><li><b>charming</b> <span>çok hoş, sevimli</span></li><li><b>competition</b> <span>yarışma</span></li><li><b>cozy</b> <span>sıcak ve rahat</span></li><li><b>department</b> <span>bölüm</span></li><li><b>famous for</b> <span>ile ünlü</span></li><li><b>fireplace</b> <span>şömine</span></li><li><b>focus (on)</b> <span>odaklanmak</span></li><li><b>full of</b> <span>ile dolu</span></li></ul>
+<h4 class="sub">A Week in the Life of Two University Students</h4>
+<ul class="wl"><li><b>environment</b> <span>çevre</span></li><li><b>helpful</b> <span>yardımsever</span></li><li><b>creative</b> <span>yaratıcı</span></li><li><b>member</b> <span>üye</span></li><li><b>nearby</b> <span>yakında</span></li><li><b>plant</b> <span>dikmek</span></li><li><b>record</b> <span>kaydetmek</span></li><li><b>traditional</b> <span>geleneksel</span></li><li><b>training</b> <span>eğitim, antrenman</span></li><li><b>volunteer</b> <span>gönüllü çalışmak</span></li><li><b>record videos</b> <span>video kaydetmek</span></li><li><b>carry a ball</b> <span>top taşımak</span></li><li><b>score points</b> <span>sayı yapmak</span></li><li><b>go skateboarding</b> <span>kaykay yapmaya gitmek</span></li><li><b>plant trees</b> <span>ağaç dikmek</span></li><li><b>save the environment</b> <span>çevreyi korumak</span></li><li><b>play the guitar</b> <span>gitar çalmak</span></li><li><b>take a class</b> <span>ders almak</span></li></ul>
+<h4 class="sub">Work and Stress</h4>
+<ul class="wl"><li><b>diet</b> <span>beslenme</span></li><li><b>train</b> <span>eğitmek</span></li><li><b>staff</b> <span>personel</span></li><li><b>cause</b> <span>sebep olmak</span></li><li><b>serve</b> <span>hizmet etmek, servis yapmak</span></li><li><b>well-paid</b> <span>iyi maaşlı</span></li><li><b>put out</b> <span>söndürmek</span></li><li><b>manage</b> <span>yönetmek</span></li><li><b>worry</b> <span>endişe</span></li><li><b>deal with</b> <span>ilgilenmek, başa çıkmak</span></li><li><b>customers</b> <span>müşteriler</span></li><li><b>salary</b> <span>maaş</span></li></ul>
+<h4 class="sub">Marrakech</h4>
+<ul class="wl"><li><b>jewelry</b> <span>mücevher</span></li><li><b>stall</b> <span>tezgah</span></li><li><b>deal</b> <span>(iyi) fiyat, pazarlık</span></li><li><b>offer</b> <span>teklif, indirim</span></li><li><b>souvenir</b> <span>hatıra eşya</span></li><li><b>fortune</b> <span>servet (cost a fortune)</span></li><li><b>experience</b> <span>deneyimlemek</span></li><li><b>bargain</b> <span>pazarlık yapmak</span></li><li><b>destination</b> <span>gidilecek yer</span></li></ul>
+<h4 class="sub">Travel Adventure</h4>
+<ul class="wl"><li><b>adventure</b> <span>macera</span></li><li><b>ancient</b> <span>antik</span></li><li><b>cheat</b> <span>hile yapmak</span></li><li><b>cycle</b> <span>bisiklet sürmek</span></li><li><b>desert</b> <span>çöl</span></li><li><b>dream</b> <span>hayal</span></li><li><b>hostel</b> <span>hostel</span></li><li><b>save</b> <span>biriktirmek</span></li><li><b>tent</b> <span>çadır</span></li><li><b>trip</b> <span>gezi</span></li><li><b>local</b> <span>yerel</span></li><li><b>flexible</b> <span>esnek</span></li><li><b>pack</b> <span>bavul hazırlamak</span></li></ul>
+<h4 class="sub">Heathrow Airport</h4>
+<ul class="wl"><li><b>air turbulence</b> <span>türbülans</span></li><li><b>boarding pass</b> <span>biniş kartı</span></li><li><b>flight</b> <span>uçuş</span></li><li><b>passenger</b> <span>yolcu</span></li><li><b>take off</b> <span>kalkış yapmak</span></li><li><b>departures board</b> <span>kalkış panosu</span></li><li><b>drug sniffer dog</b> <span>narkotik köpeği</span></li><li><b>land</b> <span>iniş yapmak</span></li><li><b>runway</b> <span>pist</span></li><li><b>take-off / landing</b> <span>kalkış / iniş</span></li><li><b>board</b> <span>uçağa binmek</span></li><li><b>duty-free shop</b> <span>gümrüksüz mağaza</span></li><li><b>security</b> <span>güvenlik</span></li><li><b>trolley</b> <span>bagaj arabası</span></li><li><b>exotic</b> <span>egzotik</span></li><li><b>incident</b> <span>olay</span></li><li><b>distance</b> <span>mesafe</span></li><li><b>heart attack</b> <span>kalp krizi</span></li><li><b>alert</b> <span>uyarı</span></li><li><b>handle</b> <span>idare etmek</span></li><li><b>on standby</b> <span>hazırda bekleyen</span></li><li><b>remove</b> <span>kaldırmak</span></li><li><b>celebrity</b> <span>ünlü</span></li><li><b>royals</b> <span>kraliyet ailesi</span></li><li><b>employer</b> <span>işveren</span></li></ul>
+<h4 class="sub">University Admissions around the World</h4>
+<ul class="wl"><li><b>achievement</b> <span>başarı</span></li><li><b>admission</b> <span>kabul</span></li><li><b>consider</b> <span>göz önüne almak</span></li><li><b>depend on</b> <span>-e bağlı olmak</span></li><li><b>participate (in)</b> <span>katılmak</span></li><li><b>reasoning</b> <span>akıl yürütme</span></li><li><b>requirement</b> <span>gereklilik</span></li><li><b>strength</b> <span>güç, güçlü yön</span></li><li><b>subject</b> <span>ders</span></li><li><b>take place</b> <span>gerçekleşmek</span></li><li><b>apply to / enrol in / get into a university</b> <span>üniversiteye başvurmak / kaydolmak / girmek</span></li><li><b>write an essay</b> <span>kompozisyon yazmak</span></li><li><b>pass / take an exam</b> <span>sınavı geçmek / sınava girmek</span></li><li><b>give the details</b> <span>ayrıntı vermek</span></li><li><b>ability</b> <span>yetenek</span></li><li><b>knowledge</b> <span>bilgi</span></li><li><b>measure</b> <span>ölçmek</span></li><li><b>performance</b> <span>performans</span></li><li><b>achieve → achievement</b> <span></span></li><li><b>apply → application</b> <span></span></li><li><b>require → requirement</b> <span></span></li><li><b>strong → strength</b> <span></span></li></ul>
+<h4 class="sub">An Italian Student in New York</h4>
+<ul class="wl"><li><b>live</b> <span>canlı</span></li><li><b>fluent</b> <span>akıcı</span></li><li><b>climate</b> <span>iklim</span></li><li><b>support</b> <span>desteklemek</span></li><li><b>go sightseeing</b> <span>gezip görmek</span></li><li><b>gap year</b> <span>ara yıl</span></li><li><b>take a break</b> <span>mola vermek</span></li><li><b>improve</b> <span>geliştirmek</span></li><li><b>get into fights</b> <span>kavgaya karışmak</span></li><li><b>difficult → difficulty</b> <span></span></li><li><b>enjoy → enjoyable</b> <span></span></li><li><b>fluent → fluently</b> <span></span></li><li><b>relax → relaxed</b> <span></span></li><li><b>safe → safety</b> <span></span></li></ul>
+</details>
+<details class="unit" open><summary><span class="u-title">P1B dinlemeleri (pre/post-listening kelimeleri)</span><span class="src">Booklet 1, s. 303–340 · Booklet 2, s. 187</span></summary>
+<h4 class="sub">From Berlin, with Love</h4>
+<ul class="wl"><li><b>another</b> <span>bir başka</span></li><li><b>digital</b> <span>dijital</span></li><li><b>good at</b> <span>-de iyi</span></li><li><b>interested in</b> <span>-e ilgili</span></li><li><b>interesting</b> <span>ilginç</span></li><li><b>kind</b> <span>nazik</span></li><li><b>library</b> <span>kütüphane</span></li><li><b>pet</b> <span>evcil hayvan</span></li><li><b>science</b> <span>fen bilimi</span></li><li><b>together</b> <span>birlikte</span></li></ul>
+<h4 class="sub">Mark and Lina&#x27;s Campus Life (adjectives)</h4>
+<ul class="wl"><li><b>friendly</b> <span>cana yakın</span></li><li><b>funny</b> <span>komik</span></li><li><b>historic</b> <span>tarihi</span></li><li><b>peaceful</b> <span>huzurlu</span></li><li><b>quiet</b> <span>sessiz</span></li><li><b>shy</b> <span>utangaç</span></li><li><b>tasty</b> <span>lezzetli</span></li><li><b>wonderful</b> <span>harika</span></li><li><b>active</b> <span>hareketli</span></li><li><b>amazing</b> <span>şaşırtıcı, harika</span></li><li><b>awesome</b> <span>müthiş</span></li></ul>
+<h4 class="sub">My Weekly Routine (collocations)</h4>
+<ul class="wl"><li><b>learn new things</b> <span>yeni şeyler öğrenmek</span></li><li><b>learn languages</b> <span>dil öğrenmek</span></li><li><b>go jogging</b> <span>koşuya çıkmak</span></li><li><b>do homework</b> <span>ödev yapmak</span></li><li><b>spend time</b> <span>vakit geçirmek</span></li><li><b>take a nap</b> <span>şekerleme yapmak</span></li><li><b>sleep late</b> <span>geç yatmak</span></li><li><b>go for a walk</b> <span>yürüyüşe çıkmak</span></li><li><b>meet friends</b> <span>arkadaşlarla buluşmak</span></li></ul>
+<h4 class="sub">Pizza Night</h4>
+<ul class="wl"><li><b>president</b> <span>başkan</span></li><li><b>fully booked</b> <span>tamamen dolu</span></li><li><b>price</b> <span>fiyat</span></li><li><b>discount</b> <span>indirim</span></li><li><b>include</b> <span>içermek</span></li><li><b>dessert</b> <span>tatlı</span></li></ul>
+<h4 class="sub">Three Interesting Jobs</h4>
+<ul class="wl"><li><b>take care of</b> <span>bakmak</span></li><li><b>feed</b> <span>beslemek</span></li><li><b>flavour</b> <span>tat, aroma</span></li><li><b>responsible</b> <span>sorumluluk sahibi</span></li><li><b>advice</b> <span>tavsiye</span></li><li><b>customer</b> <span>müşteri</span></li><li><b>visitors</b> <span>ziyaretçiler</span></li><li><b>patient (adj)</b> <span>sabırlı</span></li><li><b>test</b> <span>test etmek</span></li><li><b>health sector</b> <span>sağlık sektörü</span></li><li><b>gift</b> <span>hediye</span></li><li><b>fashionable</b> <span>şık</span></li><li><b>style</b> <span>tarz</span></li><li><b>report</b> <span>rapor</span></li></ul>
+<h4 class="sub">My Dream Job</h4>
+<ul class="wl"><li><b>stunt actor</b> <span>dublör</span></li><li><b>well-paid</b> <span>iyi maaşlı</span></li><li><b>instead of</b> <span>yerine</span></li><li><b>flexible schedule</b> <span>esnek program</span></li><li><b>go scuba diving</b> <span>tüplü dalış yapmak</span></li><li><b>martial art</b> <span>dövüş sanatı</span></li><li><b>injury</b> <span>yaralanma</span></li><li><b>characteristics</b> <span>özellikler</span></li></ul>
+<h4 class="sub">Favorite Holiday Destination</h4>
+<ul class="wl"><li><b>explore</b> <span>keşfetmek</span></li><li><b>hill</b> <span>tepe</span></li><li><b>incredible</b> <span>inanılmaz</span></li><li><b>island</b> <span>ada</span></li><li><b>reason</b> <span>sebep</span></li><li><b>recommend</b> <span>tavsiye etmek</span></li><li><b>sunset</b> <span>gün batımı</span></li><li><b>unique</b> <span>eşsiz</span></li><li><b>unusual</b> <span>sıra dışı</span></li><li><b>vacation</b> <span>tatil</span></li></ul>
+<h4 class="sub">Bilingualism</h4>
+<ul class="wl"><li><b>abroad</b> <span>yurt dışında</span></li><li><b>anxiety</b> <span>kaygı</span></li><li><b>awareness</b> <span>farkındalık</span></li><li><b>interference</b> <span>karışma, müdahale</span></li><li><b>judge</b> <span>yargılamak</span></li><li><b>mention</b> <span>bahsetmek</span></li><li><b>misunderstanding</b> <span>yanlış anlaşılma</span></li><li><b>sequential</b> <span>sıralı</span></li><li><b>simultaneous</b> <span>eş zamanlı</span></li><li><b>various</b> <span>çeşitli</span></li></ul>
+<h4 class="sub">Minerva University</h4>
+<ul class="wl"><li><b>accept</b> <span>kabul etmek</span></li><li><b>apply</b> <span>başvurmak</span></li><li><b>application</b> <span>başvuru</span></li><li><b>create</b> <span>yaratmak</span></li><li><b>focus on</b> <span>odaklanmak</span></li><li><b>in addition to</b> <span>-e ek olarak</span></li><li><b>major</b> <span>ana dal</span></li><li><b>offer</b> <span>sunmak</span></li><li><b>selective</b> <span>seçici</span></li><li><b>skill</b> <span>beceri</span></li></ul>
+<h4 class="sub">Basketball</h4>
+<ul class="wl"><li><b>hoop</b> <span>pota çemberi</span></li><li><b>net</b> <span>file</span></li><li><b>shoot a ball</b> <span>şut atmak</span></li><li><b>court</b> <span>saha</span></li><li><b>long</b> <span>uzun</span></li><li><b>rectangular</b> <span>dikdörtgen</span></li><li><b>wide</b> <span>geniş</span></li><li><b>invent</b> <span>icat etmek</span></li><li><b>indoors</b> <span>kapalı alanda</span></li><li><b>establish</b> <span>kurmak</span></li><li><b>compete</b> <span>yarışmak</span></li><li><b>progress</b> <span>ilerleme</span></li><li><b>goal</b> <span>kale, gol</span></li><li><b>offense</b> <span>hücum</span></li></ul>
+</details>
+</div>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 7 · Booklet okumaları</h3><span class="src">University Admissions · An Italian Student in New York · Minerva University</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Tür</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">admission</td><td class="t">n</td><td>kabul, giriş</td><td class="ex">Rules for university admission are different.</td></tr>
+      <tr><td class="w">consider</td><td class="t">v</td><td>dikkatle düşünmek, göz önüne almak</td><td class="ex">Universities consider your grades too.</td></tr>
+      <tr><td class="w">depend on</td><td class="t">phr v</td><td>-e bağlı olmak</td><td class="ex">Our plans depend on the weather.</td></tr>
+      <tr><td class="w">take place</td><td class="t">phr v</td><td>gerçekleşmek</td><td class="ex">The exams take place in June.</td></tr>
+      <tr><td class="w">participate (in)</td><td class="t">v</td><td>katılmak</td><td class="ex">Participate in class discussions.</td></tr>
+      <tr><td class="w">improve</td><td class="t">v</td><td>geliştirmek</td><td class="ex">He went to New York to improve his English.</td></tr>
+      <tr><td class="w">climate</td><td class="t">n</td><td>iklim</td><td class="ex">Russia has a cold climate.</td></tr>
+      <tr><td class="w">gap year</td><td class="t">n</td><td>üniversite öncesi ara yıl</td><td class="ex">She's on a gap year in Italy.</td></tr>
+      <tr><td class="w">go sightseeing</td><td class="t">v phr</td><td>gezip görmek</td><td class="ex">At weekends we go sightseeing.</td></tr>
+      <tr><td class="w">take a break</td><td class="t">v phr</td><td>mola vermek</td><td class="ex">Let's take a break and have a coffee.</td></tr>
+      <tr><td class="w">selective</td><td class="t">adj</td><td>seçici</td><td class="ex">It accepts only 1% of students. Very selective.</td></tr>
+      <tr><td class="w">major</td><td class="t">n</td><td>ana dal, bölüm</td><td class="ex">My major is Computer Engineering.</td></tr>
+      <tr><td class="w">offer</td><td class="t">v</td><td>sunmak, teklif etmek</td><td class="ex">Does it offer language classes?</td></tr>
+      <tr><td class="w">skill</td><td class="t">n</td><td>beceri</td><td class="ex">Drawing is my strongest skill.</td></tr>
+      <tr><td class="w">in addition to</td><td class="t">phr</td><td>-e ek olarak</td><td class="ex">In addition to football, I paint.</td></tr>
+    </table></div>
+  </div>
+  <div class="part-head sub-head" id="v-ek"><span class="eyebrow">Ek</span><h2>Hocaların verdiği ek kelime materyalleri</h2><span class="src">Revision kağıdı · B hocasının listesi · Seza Hoca'nın kağıdı</span></div>
+  <div class="topic">
+    <div class="group-title"><h3>Revision kağıdındaki kelimeler</h3><span class="src">Okulun Quiz 1 vocabulary revision kağıdı (arkadaşının rehberinden)</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Anlam</th><th>Kalıp</th></tr>
+      <tr><td class="w">accept</td><td>kabul etmek</td><td class="ex">accept applications</td></tr>
+      <tr><td class="w">assassinate</td><td>suikast düzenlemek</td><td class="ex">a threat to assassinate the president</td></tr>
+      <tr><td class="w">attention</td><td>dikkat</td><td class="ex">pay attention to</td></tr>
+      <tr><td class="w">birth order</td><td>doğum sırası</td><td class="ex">Birth order affects personality.</td></tr>
+      <tr><td class="w">consumer</td><td>tüketici</td><td class="ex">influence consumers</td></tr>
+      <tr><td class="w">decline</td><td>azalmak</td><td class="ex">The number began to decline.</td></tr>
+      <tr><td class="w">describe</td><td>tarif etmek</td><td class="ex">describe the suspect's face</td></tr>
+      <tr><td class="w">disaster</td><td>felaket</td><td class="ex">a terrible disaster</td></tr>
+      <tr><td class="w">distance</td><td>mesafe</td><td class="ex">a long distance from here</td></tr>
+      <tr><td class="w">dramatically</td><td>çarpıcı biçimde</td><td class="ex">increased dramatically</td></tr>
+      <tr><td class="w">encourage</td><td>teşvik etmek</td><td class="ex">encourage us to speak</td></tr>
+      <tr><td class="w">enormous</td><td>devasa</td><td class="ex">an enormous amount</td></tr>
+      <tr><td class="w">erupt</td><td>(yanardağ) patlamak</td><td class="ex">The volcano erupted.</td></tr>
+      <tr><td class="w">estimate</td><td>tahmin etmek</td><td class="ex">Police estimated 10,000 people.</td></tr>
+      <tr><td class="w">focus (on)</td><td>odaklanmak</td><td class="ex">focus on one task</td></tr>
+      <tr><td class="w">found</td><td>kurmak (founded)</td><td class="ex">founded a company</td></tr>
+      <tr><td class="w">gain insight (into)</td><td>kavrayış kazanmak</td><td class="ex">gain insight into cultures</td></tr>
+      <tr><td class="w">manage</td><td>idare etmek, başarmak</td><td class="ex">manage her time well</td></tr>
+      <tr><td class="w">portable</td><td>taşınabilir</td><td class="ex">a portable speaker</td></tr>
+      <tr><td class="w">reasoning</td><td>gerekçe, akıl yürütme</td><td class="ex">explain her reasoning</td></tr>
+      <tr><td class="w">research</td><td>araştırma</td><td class="ex">did years of research</td></tr>
+      <tr><td class="w">society</td><td>toplum</td><td class="ex">a role in society</td></tr>
+      <tr><td class="w">strict</td><td>katı, sıkı</td><td class="ex">a strict teacher</td></tr>
+      <tr><td class="w">support</td><td>desteklemek</td><td class="ex">support patients</td></tr>
+      <tr><td class="w">versatile</td><td>çok yönlü</td><td class="ex">a versatile tool</td></tr>
+    </table></div>
+  </div>
+  <div class="topic">
+    <div class="group-title"><h3>Hafta 1–5 tekrar (midterm'de çıkmayanlar)</h3><span class="src">Skillful Unit 1 + booklet</span></div>
+    <div class="tbl"><table>
+      <tr><th>Kelime</th><th>Anlam</th><th>Kelime</th><th>Anlam</th></tr>
+      <tr><td class="w">generous</td><td>cömert</td><td class="w">effect</td><td>etki, sonuç</td></tr>
+      <tr><td class="w">polite</td><td>kibar</td><td class="w">believe</td><td>inanmak</td></tr>
+      <tr><td class="w">lazy</td><td>tembel</td><td class="w">similar</td><td>benzer</td></tr>
+      <tr><td class="w">shy</td><td>utangaç</td><td class="w">goal</td><td>hedef</td></tr>
+      <tr><td class="w">confident</td><td>kendine güvenen</td><td class="w">grades</td><td>notlar</td></tr>
+      <tr><td class="w">intelligent</td><td>zeki</td><td class="w">instructions</td><td>talimatlar</td></tr>
+      <tr><td class="w">selfish</td><td>bencil</td><td class="w">big picture</td><td>genel tablo</td></tr>
+      <tr><td class="w">talkative</td><td>konuşkan</td><td class="w">experience (v)</td><td>deneyimlemek</td></tr>
+      <tr><td class="w">organized</td><td>düzenli</td><td class="w">cause (v)</td><td>sebep olmak</td></tr>
+      <tr><td class="w">comfortable</td><td>rahat</td><td class="w">deal with</td><td>başa çıkmak</td></tr>
+    </table></div>
+  </div>
+  <div class="topic" id="pv">
+    <h3>Phrasal verbs</h3>
+    <div class="tbl"><table>
+      <tr><th>Phrasal verb</th><th>Anlam</th><th>Örnek</th></tr>
+      <tr><td class="w">find out</td><td>öğrenmek</td><td class="ex">find out more about Minerva</td></tr>
+      <tr><td class="w">depend on</td><td>-e bağlı olmak</td><td class="ex">It depends on your score.</td></tr>
+      <tr><td class="w">take place</td><td>gerçekleşmek</td><td class="ex">The concert will take place on Friday.</td></tr>
+      <tr><td class="w">take part (in)</td><td>katılmak</td><td class="ex">take part in clubs</td></tr>
+      <tr><td class="w">get into</td><td>(okula) girmek, kabul edilmek</td><td class="ex">get into a good university</td></tr>
+      <tr><td class="w">get up</td><td>yataktan kalkmak</td><td class="ex">I get up at 7.</td></tr>
+      <tr><td class="w">wake up</td><td>uyanmak</td><td class="ex">I wake up early.</td></tr>
+      <tr><td class="w">stay up</td><td>geç yatmak</td><td class="ex">stay up late to study</td></tr>
+      <tr><td class="w">fall asleep</td><td>uyuyakalmak</td><td class="ex">I fall asleep quickly.</td></tr>
+      <tr><td class="w">put on</td><td>giymek</td><td class="ex">Put on your raincoat.</td></tr>
+      <tr><td class="w">deal with</td><td>başa çıkmak</td><td class="ex">deal with difficult passengers</td></tr>
+    </table></div>
+    <p><b>Diğerleri:</b> look after (bakmak) · look up (sözlükte bakmak) · put out (söndürmek) · give up (vazgeçmek) · hang out (takılmak) · get back / come back (dönmek) · stay in (evde kalmak) · set up (kurmak) · call back (geri aramak) · turn off / switch off (kapatmak) · get stuck (sıkışıp kalmak)</p>
+    <p><b>Edat kalıpları:</b> good at · interested in · responsible for · satisfied with · patient with · different from · famous for · afraid of · worried about</p>
+  </div>
+  <div class="topic" id="wf">
+    <h3>Word families</h3>
+    <div class="tbl"><table>
+      <tr><th>Fiil</th><th>İsim</th><th>Sıfat</th></tr>
+      <tr><td>invent</td><td>inventor (kişi) · invention (şey)</td><td>—</td></tr>
+      <tr><td>celebrate</td><td>celebration</td><td>—</td></tr>
+      <tr><td>develop</td><td>development</td><td>developed / developing</td></tr>
+      <tr><td>enjoy</td><td>enjoyment</td><td>enjoyable</td></tr>
+      <tr><td>improve</td><td>improvement</td><td>—</td></tr>
+      <tr><td>—</td><td>luck</td><td>lucky / unlucky</td></tr>
+      <tr><td>respect</td><td>respect</td><td>respectful</td></tr>
+      <tr><td>—</td><td>crime (suç) · criminal (suçlu)</td><td>criminal</td></tr>
+      <tr><td>achieve</td><td>achievement</td><td>—</td></tr>
+      <tr><td>apply</td><td>application · applicant</td><td>—</td></tr>
+      <tr><td>compete</td><td>competition · competitor</td><td>competitive</td></tr>
+      <tr><td>create</td><td>creation · creativity</td><td>creative</td></tr>
+      <tr><td>discover</td><td>discovery</td><td>—</td></tr>
+      <tr><td>employ</td><td>employer · employee</td><td>employed / unemployed</td></tr>
+      <tr><td>produce</td><td>production · product</td><td>productive</td></tr>
+      <tr><td>relax</td><td>relaxation</td><td>relaxed / relaxing</td></tr>
+      <tr><td>survive</td><td>survival · survivor</td><td>—</td></tr>
+      <tr><td>—</td><td>danger · safety · health · peace · fame</td><td>dangerous · safe · healthy · peaceful · famous</td></tr>
+    </table></div>
+    <p><b>-ed / -ing sıfatlar:</b> kişi nasıl hissediyor → <b>-ed</b> (I'm <b>terrified</b>, <b>bored</b>, <b>relaxed</b>). Şey nasıl → <b>-ing</b> (a <b>horrifying</b> picture, a <b>boring</b> film, <b>relaxing</b> music).</p>
+  </div>
+  <div class="topic">
+    <div class="group-title"><h3>Fazladan kelime olarak çıkabilir</h3><span class="src">Anlamını bil yeter</span></div>
+    <p>brain (beyin) · cycle (döngü) · culture (kültür) · biology · nap / take a nap (şekerleme) · subject (ders) · live music (canlı) · cuisine (mutfak) · get into fights (kavgaya karışmak) · mixed (karışık) · level (kat) · system · area (bölge) · channel (kanal) · design (tasarım) · document (belge) · hang on a minute (bir dakika bekle) · be for / be against (destekle/karşı ol) · immigrant (göçmen) · villager (köylü) · local (yerel) · by word of mouth (ağızdan ağıza) · cable / wire (kablo/tel) · volcano · function (çalışmak) · span (uzanmak) · positive · appetite (iştah, istek) · greeting (selamlama) · customs (gelenekler) · title (unvan) · season (mevsim) · court / goal / offense (saha / pota / hücum) · rectangular (dikdörtgen)</p>
+  </div>
+</section>
+
+<!-- SON 5 DK -->
+<section class="part" id="son">
+  <div class="part-head"><span class="eyebrow">Bölüm 3</span><h2>Sınavdan önce son 5 dakika</h2></div>
+  <ol class="check">
+    <li>Relative clause'da who/which/that'ten sonra <b>it, them, him, her</b> kalmasın. İnsan için <b>which</b> yok.</li>
+    <li>Comparative'de <b>than</b>, superlative'de <b>the</b>. Asla "more + -er".</li>
+    <li>Olumsuz sonuç varsa <b>too</b>, sadece vurguysa <b>very</b>.</li>
+    <li>Everyone / nobody / one of the… → <b>tekil fiil</b> (is, was, needs).</li>
+    <li>think, have, look: <b>fikir, sahiplik, görünüş</b> → -ing yok.</li>
+    <li>Kelime boşluğunda önce <b>türü</b> bul: the + isim, very + sıfat, to + fiil.</li>
+    <li>Booklet türetme tabloları: leadership, advice/advise, inspiration, organizational, succeed, profit, influence, encouraging, death, dedication · builder, decorative, survive/survivor, strength, robbery, famous, origin.</li>
+    <li>Form değişmeli mi? Özne he/she → <b>-s</b>, geçmiş → <b>-ed</b>, is/are → <b>-ing</b>. <b>upset</b>'in geçmişi yine upset.</li>
+    <li>found → <b>founded</b>; wake → <b>woke</b>; leave → <b>left</b>; fall → <b>fell</b>.</li>
+    <li><b>equipment, information, advice</b> çoğul olmaz.</li>
+  </ol>
+</section>
+
+<footer>Kaynaklar: P1A/P1B syllabus, hocanın P1A Quiz 1 Revision kağıdı, Seza Hoca'nın High Note ve CC Booklet Vocabulary Review kağıdı, CC Booklet 1–2 okuma ve dinleme kelime alıştırmaları, B hocasının kelime listesi ve mock exam'i, CC Booklet, High Note 1 Word List sayfaları (Units 1–8), Making Connections 2 Appendix 1 (Unit 1, Reading 1–2). Skillful L&S 1 (3rd ed.) Units 1–4 Wordlist sayfaları. Pratik için ayrı deneme sayfasını kullan.</footer>
+</div>
+
+</body>
+</html>
